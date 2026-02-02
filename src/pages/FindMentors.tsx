@@ -63,6 +63,10 @@ interface MentorWithProfile {
 }
 
 // Default mentors data - 2 from each domain with different types
+// Avatar URLs using UI Avatars service for professional placeholder images
+const getAvatarUrl = (name: string, bgColor: string) => 
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${bgColor}&color=fff&size=128&bold=true&format=svg`;
+
 const defaultMentors: MentorWithProfile[] = [
   // Computer Science - Faculty & Senior
   {
@@ -75,7 +79,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'faculty',
     max_mentees: 10,
     current_mentees: 0,
-    profile: { full_name: 'Dr. Rajesh Kumar', avatar_url: null, email: 'rajesh.kumar@iilm.edu' },
+    profile: { full_name: 'Dr. Rajesh Kumar', avatar_url: getAvatarUrl('Dr. Rajesh Kumar', '4f46e5'), email: 'rajesh.kumar@iilm.edu' },
   },
   {
     user_id: 'default-cs-senior',
@@ -87,7 +91,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'senior',
     max_mentees: 5,
     current_mentees: 0,
-    profile: { full_name: 'Priya Sharma', avatar_url: null, email: 'priya.sharma@iilm.edu' },
+    profile: { full_name: 'Priya Sharma', avatar_url: getAvatarUrl('Priya Sharma', '7c3aed'), email: 'priya.sharma@iilm.edu' },
   },
   // Data Science - Alumni & Senior
   {
@@ -100,7 +104,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'alumni',
     max_mentees: 8,
     current_mentees: 0,
-    profile: { full_name: 'Dr. Amit Verma', avatar_url: null, email: 'amit.verma@iilm.edu' },
+    profile: { full_name: 'Dr. Amit Verma', avatar_url: getAvatarUrl('Dr. Amit Verma', '0891b2'), email: 'amit.verma@iilm.edu' },
   },
   {
     user_id: 'default-ds-senior',
@@ -112,7 +116,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'senior',
     max_mentees: 4,
     current_mentees: 0,
-    profile: { full_name: 'Sneha Gupta', avatar_url: null, email: 'sneha.gupta@iilm.edu' },
+    profile: { full_name: 'Sneha Gupta', avatar_url: getAvatarUrl('Sneha Gupta', '059669'), email: 'sneha.gupta@iilm.edu' },
   },
   // Business - Faculty & Alumni
   {
@@ -125,7 +129,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'faculty',
     max_mentees: 12,
     current_mentees: 0,
-    profile: { full_name: 'Prof. Vikram Singh', avatar_url: null, email: 'vikram.singh@iilm.edu' },
+    profile: { full_name: 'Prof. Vikram Singh', avatar_url: getAvatarUrl('Prof. Vikram Singh', 'b45309'), email: 'vikram.singh@iilm.edu' },
   },
   {
     user_id: 'default-biz-alumni',
@@ -137,7 +141,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'alumni',
     max_mentees: 6,
     current_mentees: 0,
-    profile: { full_name: 'Ananya Mehta', avatar_url: null, email: 'ananya.mehta@iilm.edu' },
+    profile: { full_name: 'Ananya Mehta', avatar_url: getAvatarUrl('Ananya Mehta', 'dc2626'), email: 'ananya.mehta@iilm.edu' },
   },
   // Finance - Alumni & Senior
   {
@@ -150,7 +154,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'alumni',
     max_mentees: 8,
     current_mentees: 0,
-    profile: { full_name: 'Dr. Suresh Patel', avatar_url: null, email: 'suresh.patel@iilm.edu' },
+    profile: { full_name: 'Dr. Suresh Patel', avatar_url: getAvatarUrl('Dr. Suresh Patel', '1d4ed8'), email: 'suresh.patel@iilm.edu' },
   },
   {
     user_id: 'default-fin-senior',
@@ -162,7 +166,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'senior',
     max_mentees: 4,
     current_mentees: 0,
-    profile: { full_name: 'Kavita Joshi', avatar_url: null, email: 'kavita.joshi@iilm.edu' },
+    profile: { full_name: 'Kavita Joshi', avatar_url: getAvatarUrl('Kavita Joshi', 'c026d3'), email: 'kavita.joshi@iilm.edu' },
   },
   // Marketing - Faculty & Alumni
   {
@@ -175,7 +179,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'faculty',
     max_mentees: 10,
     current_mentees: 0,
-    profile: { full_name: 'Prof. Rahul Kapoor', avatar_url: null, email: 'rahul.kapoor@iilm.edu' },
+    profile: { full_name: 'Prof. Rahul Kapoor', avatar_url: getAvatarUrl('Prof. Rahul Kapoor', '65a30d'), email: 'rahul.kapoor@iilm.edu' },
   },
   {
     user_id: 'default-mkt-alumni',
@@ -187,7 +191,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'alumni',
     max_mentees: 5,
     current_mentees: 0,
-    profile: { full_name: 'Neha Agarwal', avatar_url: null, email: 'neha.agarwal@iilm.edu' },
+    profile: { full_name: 'Neha Agarwal', avatar_url: getAvatarUrl('Neha Agarwal', 'ea580c'), email: 'neha.agarwal@iilm.edu' },
   },
   // Design - Senior & Faculty
   {
@@ -200,7 +204,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'senior',
     max_mentees: 4,
     current_mentees: 0,
-    profile: { full_name: 'Arjun Reddy', avatar_url: null, email: 'arjun.reddy@iilm.edu' },
+    profile: { full_name: 'Arjun Reddy', avatar_url: getAvatarUrl('Arjun Reddy', 'be185d'), email: 'arjun.reddy@iilm.edu' },
   },
   {
     user_id: 'default-design-faculty',
@@ -212,7 +216,7 @@ const defaultMentors: MentorWithProfile[] = [
     mentor_type: 'faculty',
     max_mentees: 8,
     current_mentees: 0,
-    profile: { full_name: 'Dr. Meera Nair', avatar_url: null, email: 'meera.nair@iilm.edu' },
+    profile: { full_name: 'Dr. Meera Nair', avatar_url: getAvatarUrl('Dr. Meera Nair', '0284c7'), email: 'meera.nair@iilm.edu' },
   },
 ];
 
