@@ -5,42 +5,35 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Footer } from "@/components/Footer";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ArrowRight, Users, BookOpen, Award, CheckCircle, MessageSquare, Star, Send } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-
 const Index = () => {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubmitFeedback = () => {
     if (rating === 0) {
       toast({
         title: "Please rate your experience",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
     toast({
       title: "Thank you for your feedback!",
-      description: "We appreciate your input.",
+      description: "We appreciate your input."
     });
     setFeedbackOpen(false);
     setRating(0);
     setFeedback("");
   };
-
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
+  return <div className="min-h-screen bg-background flex flex-col">
       {/* Fixed Top Navigation */}
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-4">
@@ -55,31 +48,23 @@ const Index = () => {
 
             {/* Center Navigation Links */}
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-              <button 
-                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
-              >
+              <button onClick={() => document.getElementById('features')?.scrollIntoView({
+              behavior: 'smooth'
+            })} className="text-sm text-muted-foreground hover:text-primary transition-colors relative group">
                 Features
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
-              <button 
-                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
-              >
+              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({
+              behavior: 'smooth'
+            })} className="text-sm text-muted-foreground hover:text-primary transition-colors relative group">
                 How it Works
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
-              <button 
-                onClick={() => setAboutOpen(true)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
-              >
-                Privacy Policy
+              <button onClick={() => setAboutOpen(true)} className="text-sm text-muted-foreground hover:text-primary transition-colors relative group">
+                About
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
-              <button 
-                onClick={() => setFeedbackOpen(true)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
-              >
+              <button onClick={() => setFeedbackOpen(true)} className="text-sm text-muted-foreground hover:text-primary transition-colors relative group">
                 Send Feedback
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
@@ -90,10 +75,14 @@ const Index = () => {
 
           {/* Mobile Navigation */}
           <div className="flex md:hidden items-center justify-center gap-4 pb-3 text-xs">
-            <button onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} className="text-muted-foreground hover:text-primary transition-colors">
+            <button onClick={() => document.getElementById('features')?.scrollIntoView({
+            behavior: 'smooth'
+          })} className="text-muted-foreground hover:text-primary transition-colors">
               Features
             </button>
-            <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="text-muted-foreground hover:text-primary transition-colors">
+            <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({
+            behavior: 'smooth'
+          })} className="text-muted-foreground hover:text-primary transition-colors">
               How it Works
             </button>
             <button onClick={() => setAboutOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
@@ -154,29 +143,23 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Users,
-                title: "Verified Mentors",
-                description: "Connect with verified seniors, alumni, and faculty members."
-              },
-              {
-                icon: BookOpen,
-                title: "Structured Requests",
-                description: "Submit clear mentorship requests with your goals and expectations."
-              },
-              {
-                icon: CheckCircle,
-                title: "Track Progress",
-                description: "Monitor your mentorship requests and active connections."
-              },
-              {
-                icon: Award,
-                title: "Grow Together",
-                description: "Build meaningful relationships that support your journey."
-              }
-            ].map((feature, index) => (
-              <ScrollReveal key={index} delay={index * 100}>
+            {[{
+            icon: Users,
+            title: "Verified Mentors",
+            description: "Connect with verified seniors, alumni, and faculty members."
+          }, {
+            icon: BookOpen,
+            title: "Structured Requests",
+            description: "Submit clear mentorship requests with your goals and expectations."
+          }, {
+            icon: CheckCircle,
+            title: "Track Progress",
+            description: "Monitor your mentorship requests and active connections."
+          }, {
+            icon: Award,
+            title: "Grow Together",
+            description: "Build meaningful relationships that support your journey."
+          }].map((feature, index) => <ScrollReveal key={index} delay={index * 100}>
                 <div className="feature-card h-full">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                     <feature.icon className="w-6 h-6 text-primary" />
@@ -184,8 +167,7 @@ const Index = () => {
                   <h4 className="font-serif text-lg font-semibold text-foreground mb-2">{feature.title}</h4>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </div>
-              </ScrollReveal>
-            ))}
+              </ScrollReveal>)}
           </div>
         </div>
       </section>
@@ -204,24 +186,19 @@ const Index = () => {
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  step: "01",
-                  title: "Create Profile",
-                  description: "Sign up and complete your profile with your interests and goals."
-                },
-                {
-                  step: "02",
-                  title: "Find Mentors",
-                  description: "Browse mentors filtered by expertise, domain, and availability."
-                },
-                {
-                  step: "03",
-                  title: "Connect & Grow",
-                  description: "Send requests, get accepted, and start your mentorship journey."
-                }
-              ].map((item, index) => (
-                <ScrollReveal key={index} delay={index * 150} direction="up">
+              {[{
+              step: "01",
+              title: "Create Profile",
+              description: "Sign up and complete your profile with your interests and goals."
+            }, {
+              step: "02",
+              title: "Find Mentors",
+              description: "Browse mentors filtered by expertise, domain, and availability."
+            }, {
+              step: "03",
+              title: "Connect & Grow",
+              description: "Send requests, get accepted, and start your mentorship journey."
+            }].map((item, index) => <ScrollReveal key={index} delay={index * 150} direction="up">
                   <div className="text-center group">
                     <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-all duration-300 group-hover:scale-110">
                       <span className="text-primary font-bold text-xl">{item.step}</span>
@@ -229,8 +206,7 @@ const Index = () => {
                     <h4 className="font-serif text-xl font-semibold text-foreground mb-2">{item.title}</h4>
                     <p className="text-muted-foreground">{item.description}</p>
                   </div>
-                </ScrollReveal>
-              ))}
+                </ScrollReveal>)}
             </div>
           </div>
         </div>
@@ -315,31 +291,13 @@ const Index = () => {
             <div>
               <label className="text-sm font-medium text-foreground">Rate your experience</label>
               <div className="flex justify-center gap-2 mt-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    onClick={() => setRating(star)}
-                    className="focus:outline-none transition-transform hover:scale-110"
-                  >
-                    <Star
-                      className={`w-8 h-8 transition-colors ${
-                        star <= rating
-                          ? "fill-warning text-warning"
-                          : "text-muted-foreground hover:text-warning"
-                      }`}
-                    />
-                  </button>
-                ))}
+                {[1, 2, 3, 4, 5].map(star => <button key={star} onClick={() => setRating(star)} className="focus:outline-none transition-transform hover:scale-110">
+                    <Star className={`w-8 h-8 transition-colors ${star <= rating ? "fill-warning text-warning" : "text-muted-foreground hover:text-warning"}`} />
+                  </button>)}
               </div>
             </div>
             <div>
-              <Textarea
-                placeholder="Share your feedback, suggestions, or report issues..."
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                className="min-h-[120px]"
-                maxLength={150}
-              />
+              <Textarea placeholder="Share your feedback, suggestions, or report issues..." value={feedback} onChange={e => setFeedback(e.target.value)} className="min-h-[120px]" maxLength={150} />
               <p className="text-xs text-muted-foreground text-right mt-1">
                 {feedback.length} / 150 characters
               </p>
@@ -350,8 +308,6 @@ const Index = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
