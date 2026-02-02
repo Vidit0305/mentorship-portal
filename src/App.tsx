@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import MenteeDashboard from "./pages/MenteeDashboard";
 import MentorDashboard from "./pages/MentorDashboard";
+import FindMentors from "./pages/FindMentors";
+import MyRequests from "./pages/MyRequests";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/mentee-dashboard" element={<MenteeDashboard />} />
             <Route path="/mentor-dashboard" element={<MentorDashboard />} />
+            <Route path="/find-mentors" element={<FindMentors />} />
+            <Route path="/my-requests" element={<MyRequests />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

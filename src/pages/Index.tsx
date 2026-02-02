@@ -44,31 +44,35 @@ const Index = () => {
       <nav className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="font-serif text-xl font-semibold text-foreground">
+            <h1 className="font-semibold text-xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
               IILM UNIVERSITY
             </h1>
             <span className="text-xs text-muted-foreground">Mentorship Portal</span>
           </div>
           
-          {/* Center Navigation Links */}
-          <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-foreground transition-colors">How it Works</a>
-            <button 
-              onClick={() => setAboutOpen(true)}
-              className="hover:text-foreground transition-colors"
-            >
-              About
-            </button>
-            <button 
-              onClick={() => setFeedbackOpen(true)}
-              className="hover:text-foreground transition-colors"
-            >
-              Send Feedback
-            </button>
-          </div>
-          
           <ThemeToggle />
+        </div>
+        
+        {/* Center Navigation Links - Below header on separate line */}
+        <div className="flex items-center justify-center gap-6 md:gap-10 mt-4 text-sm">
+          <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
+            Features
+          </a>
+          <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
+            How it Works
+          </a>
+          <button 
+            onClick={() => setAboutOpen(true)}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            About
+          </button>
+          <button 
+            onClick={() => setFeedbackOpen(true)}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Send Feedback
+          </button>
         </div>
       </nav>
 
