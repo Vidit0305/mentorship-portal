@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
-import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { ImageCropper } from "@/components/ImageCropper";
 import { PullToRefresh } from "@/components/PullToRefresh";
@@ -326,7 +325,7 @@ const MenteeDashboard = () => {
               <h1 className="text-lg font-semibold text-foreground font-display">
                 IILM UNIVERSITY
               </h1>
-              <span className="text-xs text-primary font-medium">Mentorship Portal</span>
+              <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
             </Link>
             <div className="flex items-center gap-2">
               <ThemeToggle />
@@ -575,7 +574,6 @@ const MenteeDashboard = () => {
         </main>
       </PullToRefresh>
 
-      <Footer />
       <MobileBottomNav role="mentee" />
 
       {/* Image Cropper */}
