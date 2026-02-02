@@ -16,6 +16,7 @@ import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { ImageCropper } from "@/components/ImageCropper";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
+import { useMentorChartData, ChartFilterType } from "@/hooks/useMentorChartData";
 import { 
   User, 
   LogOut, 
@@ -27,10 +28,11 @@ import {
   Inbox,
   TrendingUp,
   Bell,
-  MessageSquare
+  MessageSquare,
+  Calendar
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 interface Profile {
   id: string;
@@ -83,15 +85,9 @@ const MentorDashboard = () => {
   const [currentMentees, setCurrentMentees] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
 
-  // Chart data
-  const chartData = [
-    { month: "Jan", mentees: 0 },
-    { month: "Feb", mentees: 1 },
-    { month: "Mar", mentees: 2 },
-    { month: "Apr", mentees: 3 },
-    { month: "May", mentees: 3 },
-    { month: "Jun", mentees: currentMentees },
-  ];
+  // Chart filter and data
+  const [chartFilter, setChartFilter] = useState<ChartFilterType>("month");
+  const { chartData } = useMentorChartData(user?.id, chartFilter);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -156,8 +152,15 @@ const MentorDashboard = () => {
         setExperience(mentorData.experience || "");
         setIsAvailable(mentorData.is_available);
         setMaxMentees(mentorData.max_mentees.toString());
-        setCurrentMentees(mentorData.current_mentees);
       }
+
+      // Fetch actual mentees count from active_mentorships
+      const { count: menteesCount } = await supabase
+        .from("active_mentorships")
+        .select("*", { count: "exact", head: true })
+        .eq("mentor_id", userId);
+
+      setCurrentMentees(menteesCount || 0);
 
       // Fetch pending requests
       const { count: pending } = await supabase
@@ -182,6 +185,36 @@ const MentorDashboard = () => {
       if (user) fetchProfile(user.id);
     },
   });
+
+  // Real-time subscription for mentees count
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel("mentor_mentees_count")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "active_mentorships",
+          filter: `mentor_id=eq.${user.id}`,
+        },
+        async () => {
+          // Refetch mentee count
+          const { count } = await supabase
+            .from("active_mentorships")
+            .select("*", { count: "exact", head: true })
+            .eq("mentor_id", user.id);
+          setCurrentMentees(count || 0);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   // Track changes
   useEffect(() => {
@@ -517,24 +550,45 @@ const MentorDashboard = () => {
                 {/* Growth Chart */}
                 <Card className="glass-card">
                   <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-primary" />
-                      <CardTitle className="font-serif text-lg">Insights</CardTitle>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                        <CardTitle className="font-serif text-lg">Insights</CardTitle>
+                      </div>
+                      <Select value={chartFilter} onValueChange={(v) => setChartFilter(v as ChartFilterType)}>
+                        <SelectTrigger className="w-24 h-8 text-xs">
+                          <Calendar className="w-3 h-3 mr-1" />
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="day">Day</SelectItem>
+                          <SelectItem value="month">Month</SelectItem>
+                          <SelectItem value="year">Year</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <p className="text-xs text-muted-foreground">Mentees connected over time</p>
+                    <p className="text-xs text-muted-foreground">Requests received, accepted & rejected</p>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-40">
+                    <div className="h-48">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={chartData}>
                           <defs>
-                            <linearGradient id="colorMentees" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="colorReceived" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
                               <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                             </linearGradient>
+                            <linearGradient id="colorAccepted" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0}/>
+                            </linearGradient>
+                            <linearGradient id="colorRejected" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0}/>
+                            </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis dataKey="month" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+                          <XAxis dataKey="label" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
                           <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
                           <Tooltip 
                             contentStyle={{ 
@@ -543,12 +597,32 @@ const MentorDashboard = () => {
                               borderRadius: "8px"
                             }}
                           />
+                          <Legend wrapperStyle={{ fontSize: '10px' }} />
                           <Area 
                             type="monotone" 
-                            dataKey="mentees" 
+                            dataKey="received" 
+                            name="Received"
                             stroke="hsl(var(--primary))" 
                             fillOpacity={1} 
-                            fill="url(#colorMentees)" 
+                            fill="url(#colorReceived)" 
+                            strokeWidth={2}
+                          />
+                          <Area 
+                            type="monotone" 
+                            dataKey="accepted" 
+                            name="Accepted"
+                            stroke="hsl(var(--success))" 
+                            fillOpacity={1} 
+                            fill="url(#colorAccepted)" 
+                            strokeWidth={2}
+                          />
+                          <Area 
+                            type="monotone" 
+                            dataKey="rejected" 
+                            name="Rejected"
+                            stroke="hsl(var(--destructive))" 
+                            fillOpacity={1} 
+                            fill="url(#colorRejected)" 
                             strokeWidth={2}
                           />
                         </AreaChart>
