@@ -116,7 +116,7 @@ const Auth = () => {
           options: {
             emailRedirectTo: `${window.location.origin}/`,
             data: {
-              role: role,
+              role: role, // This is passed to the database trigger
             }
           }
         });
@@ -133,15 +133,10 @@ const Auth = () => {
             throw error;
           }
         } else {
-          // Update profile with role
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            await supabase.from("profiles").update({ role: role as "mentee" | "mentor" }).eq("user_id", user.id);
-          }
-          
+          // The database trigger handles creating profiles, user_roles, and mentor/mentee profiles
           toast({
             title: "Account created!",
-            description: "Please check your email to verify your account, or sign in if email confirmation is disabled.",
+            description: `Welcome! You've signed up as a ${role}. Please check your email to verify your account, or sign in if email confirmation is disabled.`,
           });
         }
       } else {
