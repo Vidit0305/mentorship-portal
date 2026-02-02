@@ -17,7 +17,9 @@ const Index = () => {
   const {
     toast
   } = useToast();
-  const handleSubmitFeedback = () => {
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
+
+  const handleSubmitFeedback = async () => {
     if (rating === 0) {
       toast({
         title: "Please rate your experience",
@@ -27,18 +29,42 @@ const Index = () => {
       return;
     }
     
-    // Send feedback via email
-    const subject = encodeURIComponent(`Mentorship Portal Feedback - ${rating} Stars`);
-    const body = encodeURIComponent(`Rating: ${rating}/5 Stars\n\nFeedback:\n${feedback}`);
-    window.open(`mailto:vidit.sharma0305@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    setSubmittingFeedback(true);
     
-    toast({
-      title: "Thank you for your feedback!",
-      description: "Your email client has been opened to send the feedback.",
-    });
-    setFeedbackOpen(false);
-    setRating(0);
-    setFeedback("");
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-feedback`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ rating, feedback }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit feedback");
+      }
+
+      toast({
+        title: "Thank you for your feedback! 🎉",
+        description: data.message || "We really appreciate you taking the time to share your thoughts with us.",
+      });
+      setFeedbackOpen(false);
+      setRating(0);
+      setFeedback("");
+    } catch (error) {
+      console.error("Feedback submission error:", error);
+      toast({
+        title: "Oops! Something went wrong",
+        description: "We couldn't submit your feedback right now. Please try again later.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setSubmittingFeedback(false);
+    }
   };
   return <div className="min-h-screen bg-background flex flex-col">
       {/* Fixed Top Navigation */}
@@ -309,8 +335,12 @@ const Index = () => {
                 {feedback.length} / 150 characters
               </p>
             </div>
-            <Button onClick={handleSubmitFeedback} className="w-full" variant="heroPrimary">
-              <Send className="w-4 h-4 mr-2" /> Submit Feedback
+            <Button onClick={handleSubmitFeedback} className="w-full" variant="heroPrimary" disabled={submittingFeedback}>
+              {submittingFeedback ? (
+                <>Sending...</>
+              ) : (
+                <><Send className="w-4 h-4 mr-2" /> Submit Feedback</>
+              )}
             </Button>
           </div>
         </DialogContent>
