@@ -12,6 +12,7 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { MentorshipRequestDialog } from "@/components/MentorshipRequestDialog";
+import { MenteeQueryForm } from "@/components/MenteeQueryForm";
 import {
   Select,
   SelectContent,
@@ -19,6 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 import { 
   User, 
   LogOut, 
@@ -28,7 +37,9 @@ import {
   GraduationCap,
   Briefcase,
   Check,
-  ArrowLeft
+  ArrowLeft,
+  FileText,
+  SlidersHorizontal
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
@@ -63,6 +74,34 @@ const FindMentors = () => {
   
   const [selectedMentor, setSelectedMentor] = useState<MentorWithProfile | null>(null);
   const [requestDialogOpen, setRequestDialogOpen] = useState(false);
+  const [queryFormOpen, setQueryFormOpen] = useState(false);
+  const [queryMentor, setQueryMentor] = useState<MentorWithProfile | null>(null);
+
+  // New filters
+  const [helpTypeFilter, setHelpTypeFilter] = useState<string[]>([]);
+  const [domainFilter, setDomainFilter] = useState<string[]>([]);
+
+  const helpTypes = [
+    "Academic Help",
+    "Internship Help",
+    "Placement Help",
+    "Career Guidance",
+    "Project Help",
+    "Others",
+  ];
+
+  const domains = [
+    "Computer Science",
+    "Data Science",
+    "Business & Management",
+    "Finance",
+    "Marketing",
+    "Design & UX",
+    "Engineering",
+    "Research",
+    "Entrepreneurship",
+    "Others",
+  ];
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -147,8 +186,43 @@ const FindMentors = () => {
       result = result.filter(mentor => mentor.is_available);
     }
 
+    // Help type filter
+    if (helpTypeFilter.length > 0) {
+      result = result.filter(mentor =>
+        mentor.areas_of_guidance?.some(area =>
+          helpTypeFilter.some(ht => area.toLowerCase().includes(ht.toLowerCase().replace(" Help", "").replace(" Guidance", "")))
+        )
+      );
+    }
+
+    // Domain filter
+    if (domainFilter.length > 0) {
+      result = result.filter(mentor =>
+        mentor.expertise?.some(exp =>
+          domainFilter.some(d => exp.toLowerCase().includes(d.toLowerCase()))
+        )
+      );
+    }
+
     setFilteredMentors(result);
-  }, [searchQuery, typeFilter, availabilityFilter, mentors]);
+  }, [searchQuery, typeFilter, availabilityFilter, helpTypeFilter, domainFilter, mentors]);
+
+  const handleOpenQueryForm = (mentor: MentorWithProfile) => {
+    setQueryMentor(mentor);
+    setQueryFormOpen(true);
+  };
+
+  const toggleHelpType = (type: string) => {
+    setHelpTypeFilter(prev =>
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    );
+  };
+
+  const toggleDomain = (domain: string) => {
+    setDomainFilter(prev =>
+      prev.includes(domain) ? prev.filter(d => d !== domain) : [...prev, domain]
+    );
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -225,39 +299,135 @@ const FindMentors = () => {
           </div>
 
           {/* Search and Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                placeholder="Search by name, expertise, or areas..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12"
-              />
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name, expertise, or areas..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 h-12"
+                />
+              </div>
+              <div className="flex gap-3 flex-wrap">
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger className="w-[140px] h-12">
+                    <Filter className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="senior">Senior</SelectItem>
+                    <SelectItem value="alumni">Alumni</SelectItem>
+                    <SelectItem value="faculty">Faculty</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
+                  <SelectTrigger className="w-[160px] h-12">
+                    <SelectValue placeholder="Availability" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="available">Available Only</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Help Type Filter */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="h-12 gap-2">
+                      <SlidersHorizontal className="w-4 h-4" />
+                      Help Type
+                      {helpTypeFilter.length > 0 && (
+                        <Badge variant="secondary" className="ml-1 px-1.5 py-0.5 text-xs">
+                          {helpTypeFilter.length}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Filter by Help Type</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {helpTypes.map((type) => (
+                      <DropdownMenuCheckboxItem
+                        key={type}
+                        checked={helpTypeFilter.includes(type)}
+                        onCheckedChange={() => toggleHelpType(type)}
+                      >
+                        {type}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Domain Filter */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="h-12 gap-2">
+                      <Briefcase className="w-4 h-4" />
+                      Domain
+                      {domainFilter.length > 0 && (
+                        <Badge variant="secondary" className="ml-1 px-1.5 py-0.5 text-xs">
+                          {domainFilter.length}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Categorisation by Domain</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {domains.map((domain) => (
+                      <DropdownMenuCheckboxItem
+                        key={domain}
+                        checked={domainFilter.includes(domain)}
+                        onCheckedChange={() => toggleDomain(domain)}
+                      >
+                        {domain}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[140px] h-12">
-                  <Filter className="w-4 h-4 mr-2" />
-                  <SelectValue placeholder="Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="senior">Senior</SelectItem>
-                  <SelectItem value="alumni">Alumni</SelectItem>
-                  <SelectItem value="faculty">Faculty</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
-                <SelectTrigger className="w-[160px] h-12">
-                  <SelectValue placeholder="Availability" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="available">Available Only</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+
+            {/* Active filters display */}
+            {(helpTypeFilter.length > 0 || domainFilter.length > 0) && (
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="text-sm text-muted-foreground">Active filters:</span>
+                {helpTypeFilter.map((type) => (
+                  <Badge
+                    key={type}
+                    variant="secondary"
+                    className="cursor-pointer hover:bg-destructive/20"
+                    onClick={() => toggleHelpType(type)}
+                  >
+                    {type} ×
+                  </Badge>
+                ))}
+                {domainFilter.map((domain) => (
+                  <Badge
+                    key={domain}
+                    variant="outline"
+                    className="cursor-pointer hover:bg-destructive/20"
+                    onClick={() => toggleDomain(domain)}
+                  >
+                    {domain} ×
+                  </Badge>
+                ))}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setHelpTypeFilter([]);
+                    setDomainFilter([]);
+                  }}
+                  className="text-xs text-muted-foreground"
+                >
+                  Clear all
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Mentors Grid */}
@@ -327,17 +497,28 @@ const FindMentors = () => {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center justify-between pt-2 gap-2">
                       <span className="text-xs text-muted-foreground">
                         {mentor.current_mentees || 0}/{mentor.max_mentees || 5} mentees
                       </span>
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleRequestMentorship(mentor)}
-                        disabled={!mentor.is_available || (mentor.current_mentees || 0) >= (mentor.max_mentees || 5)}
-                      >
-                        Request Mentorship
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleOpenQueryForm(mentor)}
+                          disabled={!mentor.is_available}
+                        >
+                          <FileText className="w-4 h-4 mr-1" />
+                          Query
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          onClick={() => handleRequestMentorship(mentor)}
+                          disabled={!mentor.is_available || (mentor.current_mentees || 0) >= (mentor.max_mentees || 5)}
+                        >
+                          Request
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -363,6 +544,16 @@ const FindMentors = () => {
               description: "Your mentorship request has been submitted.",
             });
           }}
+        />
+      )}
+
+      {/* Query Form */}
+      {queryMentor && (
+        <MenteeQueryForm
+          open={queryFormOpen}
+          onOpenChange={setQueryFormOpen}
+          mentorId={queryMentor.user_id}
+          mentorName={queryMentor.profile?.full_name || "Mentor"}
         />
       )}
     </div>

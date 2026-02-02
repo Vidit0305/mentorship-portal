@@ -77,6 +77,63 @@ export type Database = {
         }
         Relationships: []
       }
+      mentee_queries: {
+        Row: {
+          course_program_year: string
+          created_at: string
+          domain_guidance: string
+          email: string
+          expected_outcome: string
+          full_name: string
+          id: string
+          mentee_id: string
+          mentor_id: string
+          mentorship_duration: string
+          mentorship_type: string
+          query_description: string
+          share_token: string
+          university_name: string
+          updated_at: string
+          why_this_mentor: string
+        }
+        Insert: {
+          course_program_year: string
+          created_at?: string
+          domain_guidance: string
+          email: string
+          expected_outcome: string
+          full_name: string
+          id?: string
+          mentee_id: string
+          mentor_id: string
+          mentorship_duration: string
+          mentorship_type: string
+          query_description: string
+          share_token?: string
+          university_name: string
+          updated_at?: string
+          why_this_mentor: string
+        }
+        Update: {
+          course_program_year?: string
+          created_at?: string
+          domain_guidance?: string
+          email?: string
+          expected_outcome?: string
+          full_name?: string
+          id?: string
+          mentee_id?: string
+          mentor_id?: string
+          mentorship_duration?: string
+          mentorship_type?: string
+          query_description?: string
+          share_token?: string
+          university_name?: string
+          updated_at?: string
+          why_this_mentor?: string
+        }
+        Relationships: []
+      }
       mentor_profiles: {
         Row: {
           areas_of_guidance: string[] | null
