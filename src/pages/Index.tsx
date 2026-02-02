@@ -46,34 +46,34 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center">
               <h1 className="font-display font-semibold text-lg text-foreground">
                 IILM UNIVERSITY
               </h1>
-              <span className="text-[10px] text-muted-foreground -mt-1">Mentorship Portal</span>
+              <span className="text-[10px] text-primary font-medium -mt-1">Mentorship Portal</span>
             </div>
 
             {/* Center Navigation Links */}
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-              <a 
-                href="#features" 
+              <button 
+                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
               >
                 Features
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </a>
-              <a 
-                href="#how-it-works" 
+              </button>
+              <button 
+                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
               >
                 How it Works
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </a>
+              </button>
               <button 
                 onClick={() => setAboutOpen(true)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
               >
-                About
+                Privacy Policy
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
               <button 
@@ -90,14 +90,14 @@ const Index = () => {
 
           {/* Mobile Navigation */}
           <div className="flex md:hidden items-center justify-center gap-4 pb-3 text-xs">
-            <a href="#features" className="text-muted-foreground hover:text-primary transition-colors">
+            <button onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} className="text-muted-foreground hover:text-primary transition-colors">
               Features
-            </a>
-            <a href="#how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
+            </button>
+            <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="text-muted-foreground hover:text-primary transition-colors">
               How it Works
-            </a>
+            </button>
             <button onClick={() => setAboutOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
-              About
+              Privacy
             </button>
             <button onClick={() => setFeedbackOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
               Feedback
@@ -236,31 +236,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20">
-        <ScrollReveal>
-          <div className="max-w-3xl mx-auto text-center">
-            <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-6">
-              Ready to start your mentorship journey?
-            </h3>
-            <p className="text-muted-foreground mb-8">
-              Join our community of students and mentors committed to growth and success.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/auth?role=mentee">
-                <Button variant="heroPrimary" className="hover-glow">
-                  Get Started <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to="/auth?role=mentor">
-                <Button variant="heroSecondary" className="hover-lift">
-                  Become a Mentor <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
 
       {/* Footer */}
       <Footer />

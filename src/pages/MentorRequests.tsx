@@ -250,11 +250,11 @@ const MentorRequests = () => {
           <div className="flex items-center justify-between">
             <Link to="/mentor-dashboard" className="flex items-center gap-2">
               <ChevronLeft className="w-5 h-5 text-muted-foreground" />
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center">
                 <h1 className="text-lg font-semibold text-foreground font-display">
                   IILM UNIVERSITY
                 </h1>
-                <span className="text-xs text-muted-foreground">Mentorship Portal</span>
+                <span className="text-xs text-primary font-medium">Mentorship Portal</span>
               </div>
             </Link>
             <div className="flex items-center gap-2">

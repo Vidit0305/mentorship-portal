@@ -327,11 +327,11 @@ const MentorDashboard = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex flex-col">
+            <Link to="/" className="flex flex-col items-center">
               <h1 className="text-lg font-semibold text-foreground font-display">
                 IILM UNIVERSITY
               </h1>
-              <span className="text-xs text-muted-foreground">Mentorship Portal</span>
+              <span className="text-xs text-primary font-medium">Mentorship Portal</span>
             </Link>
             <div className="flex items-center gap-2">
               <ThemeToggle />
