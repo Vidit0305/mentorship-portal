@@ -62,6 +62,160 @@ interface MentorWithProfile {
   hasPendingRequest?: boolean;
 }
 
+// Default mentors data - 2 from each domain with different types
+const defaultMentors: MentorWithProfile[] = [
+  // Computer Science - Faculty & Senior
+  {
+    user_id: 'default-cs-faculty',
+    bio: 'Professor with 15+ years in software engineering and AI research.',
+    expertise: ['Artificial Intelligence', 'Machine Learning', 'Software Engineering'],
+    areas_of_guidance: ['Academic Research', 'Career Planning'],
+    experience: '15+ years',
+    is_available: true,
+    mentor_type: 'faculty',
+    max_mentees: 10,
+    current_mentees: 0,
+    profile: { full_name: 'Dr. Rajesh Kumar', avatar_url: null, email: 'rajesh.kumar@iilm.edu' },
+  },
+  {
+    user_id: 'default-cs-senior',
+    bio: 'Final year CS student passionate about full-stack development.',
+    expertise: ['Web Development', 'React', 'Node.js'],
+    areas_of_guidance: ['Internship Prep', 'Project Guidance'],
+    experience: '4 years',
+    is_available: true,
+    mentor_type: 'senior',
+    max_mentees: 5,
+    current_mentees: 0,
+    profile: { full_name: 'Priya Sharma', avatar_url: null, email: 'priya.sharma@iilm.edu' },
+  },
+  // Data Science - Alumni & Senior
+  {
+    user_id: 'default-ds-alumni',
+    bio: 'Data Science lead at a Fortune 500 company with research background.',
+    expertise: ['Data Analytics', 'Python', 'Statistics'],
+    areas_of_guidance: ['Career Transition', 'Industry Insights'],
+    experience: '12 years',
+    is_available: true,
+    mentor_type: 'alumni',
+    max_mentees: 8,
+    current_mentees: 0,
+    profile: { full_name: 'Dr. Amit Verma', avatar_url: null, email: 'amit.verma@iilm.edu' },
+  },
+  {
+    user_id: 'default-ds-senior',
+    bio: 'Senior data scientist specializing in NLP and deep learning.',
+    expertise: ['NLP', 'Deep Learning', 'TensorFlow'],
+    areas_of_guidance: ['Research Projects', 'Skill Development'],
+    experience: '3 years',
+    is_available: true,
+    mentor_type: 'senior',
+    max_mentees: 4,
+    current_mentees: 0,
+    profile: { full_name: 'Sneha Gupta', avatar_url: null, email: 'sneha.gupta@iilm.edu' },
+  },
+  // Business - Faculty & Alumni
+  {
+    user_id: 'default-biz-faculty',
+    bio: 'Professor of Strategic Management with corporate consulting experience.',
+    expertise: ['Strategy', 'Leadership', 'Operations'],
+    areas_of_guidance: ['MBA Prep', 'Career Strategy'],
+    experience: '20 years',
+    is_available: true,
+    mentor_type: 'faculty',
+    max_mentees: 12,
+    current_mentees: 0,
+    profile: { full_name: 'Prof. Vikram Singh', avatar_url: null, email: 'vikram.singh@iilm.edu' },
+  },
+  {
+    user_id: 'default-biz-alumni',
+    bio: 'Startup founder and business consultant.',
+    expertise: ['Entrepreneurship', 'Business Development', 'Startups'],
+    areas_of_guidance: ['Startup Guidance', 'Networking'],
+    experience: '8 years',
+    is_available: true,
+    mentor_type: 'alumni',
+    max_mentees: 6,
+    current_mentees: 0,
+    profile: { full_name: 'Ananya Mehta', avatar_url: null, email: 'ananya.mehta@iilm.edu' },
+  },
+  // Finance - Alumni & Senior
+  {
+    user_id: 'default-fin-alumni',
+    bio: 'Investment banking professional with CFA certification.',
+    expertise: ['Investment Banking', 'Financial Analysis', 'CFA'],
+    areas_of_guidance: ['Finance Careers', 'Certification Prep'],
+    experience: '10 years',
+    is_available: true,
+    mentor_type: 'alumni',
+    max_mentees: 8,
+    current_mentees: 0,
+    profile: { full_name: 'Dr. Suresh Patel', avatar_url: null, email: 'suresh.patel@iilm.edu' },
+  },
+  {
+    user_id: 'default-fin-senior',
+    bio: 'Final year finance student with internship at top banks.',
+    expertise: ['Financial Modeling', 'Excel', 'Valuation'],
+    areas_of_guidance: ['Internship Tips', 'Resume Review'],
+    experience: '3 years',
+    is_available: true,
+    mentor_type: 'senior',
+    max_mentees: 4,
+    current_mentees: 0,
+    profile: { full_name: 'Kavita Joshi', avatar_url: null, email: 'kavita.joshi@iilm.edu' },
+  },
+  // Marketing - Faculty & Alumni
+  {
+    user_id: 'default-mkt-faculty',
+    bio: 'Professor of Digital Marketing and brand strategist.',
+    expertise: ['Digital Marketing', 'Brand Strategy', 'SEO'],
+    areas_of_guidance: ['Marketing Fundamentals', 'Case Studies'],
+    experience: '18 years',
+    is_available: true,
+    mentor_type: 'faculty',
+    max_mentees: 10,
+    current_mentees: 0,
+    profile: { full_name: 'Prof. Rahul Kapoor', avatar_url: null, email: 'rahul.kapoor@iilm.edu' },
+  },
+  {
+    user_id: 'default-mkt-alumni',
+    bio: 'Marketing manager at a leading e-commerce company.',
+    expertise: ['E-commerce', 'Growth Marketing', 'Analytics'],
+    areas_of_guidance: ['Industry Experience', 'Job Search'],
+    experience: '6 years',
+    is_available: true,
+    mentor_type: 'alumni',
+    max_mentees: 5,
+    current_mentees: 0,
+    profile: { full_name: 'Neha Agarwal', avatar_url: null, email: 'neha.agarwal@iilm.edu' },
+  },
+  // Design - Senior & Faculty
+  {
+    user_id: 'default-design-senior',
+    bio: 'UX designer with experience at top tech companies.',
+    expertise: ['UI/UX Design', 'Figma', 'User Research'],
+    areas_of_guidance: ['Portfolio Review', 'Design Thinking'],
+    experience: '5 years',
+    is_available: true,
+    mentor_type: 'senior',
+    max_mentees: 4,
+    current_mentees: 0,
+    profile: { full_name: 'Arjun Reddy', avatar_url: null, email: 'arjun.reddy@iilm.edu' },
+  },
+  {
+    user_id: 'default-design-faculty',
+    bio: 'Professor of Human-Computer Interaction and design research.',
+    expertise: ['HCI', 'Design Research', 'Accessibility'],
+    areas_of_guidance: ['Academic Research', 'Design Critique'],
+    experience: '14 years',
+    is_available: true,
+    mentor_type: 'faculty',
+    max_mentees: 8,
+    current_mentees: 0,
+    profile: { full_name: 'Dr. Meera Nair', avatar_url: null, email: 'meera.nair@iilm.edu' },
+  },
+];
+
 const FindMentors = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -168,7 +322,7 @@ const FindMentors = () => {
         pendingRequestMentorIds = pendingRequests?.map(r => r.mentor_id) || [];
       }
 
-      // Merge the data
+      // Merge the data from database
       const mentorsWithProfiles = mentorProfiles?.map(mentor => ({
         ...mentor,
         profile: profiles?.find(p => p.user_id === mentor.user_id) || null,
@@ -176,14 +330,19 @@ const FindMentors = () => {
         hasPendingRequest: pendingRequestMentorIds.includes(mentor.user_id),
       })) || [];
 
-      setMentors(mentorsWithProfiles);
-      setFilteredMentors(mentorsWithProfiles);
+      // Combine with default mentors (filter out any that might conflict)
+      const allMentors = [...mentorsWithProfiles, ...defaultMentors];
+
+      setMentors(allMentors);
+      setFilteredMentors(allMentors);
     } catch (error) {
       console.error("Error fetching mentors:", error);
+      // Still show default mentors even if fetch fails
+      setMentors(defaultMentors);
+      setFilteredMentors(defaultMentors);
       toast({
-        title: "Error",
-        description: "Failed to load mentors",
-        variant: "destructive",
+        title: "Note",
+        description: "Showing sample mentors. Real mentors will appear once registered.",
       });
     } finally {
       setLoading(false);

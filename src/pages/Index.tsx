@@ -21,13 +21,20 @@ const Index = () => {
     if (rating === 0) {
       toast({
         title: "Please rate your experience",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 5000,
       });
       return;
     }
+    
+    // Send feedback via email
+    const subject = encodeURIComponent(`Mentorship Portal Feedback - ${rating} Stars`);
+    const body = encodeURIComponent(`Rating: ${rating}/5 Stars\n\nFeedback:\n${feedback}`);
+    window.open(`mailto:vidit.sharma0305@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    
     toast({
       title: "Thank you for your feedback!",
-      description: "We appreciate your input."
+      description: "Your email client has been opened to send the feedback.",
     });
     setFeedbackOpen(false);
     setRating(0);
