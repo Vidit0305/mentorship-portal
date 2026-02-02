@@ -16,6 +16,7 @@ import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { ImageCropper } from "@/components/ImageCropper";
 import { PullToRefresh } from "@/components/PullToRefresh";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { 
   User, 
   LogOut, 
@@ -25,7 +26,8 @@ import {
   Clock,
   CheckCircle,
   Inbox,
-  TrendingUp
+  TrendingUp,
+  Bell
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -171,6 +173,15 @@ const MentorDashboard = () => {
       setLoading(false);
     }
   };
+
+  // Real-time notifications for new requests
+  useRealtimeNotifications({
+    userId: user?.id || null,
+    role: "mentor",
+    onNewRequest: () => {
+      if (user) fetchProfile(user.id);
+    },
+  });
 
   // Track changes
   useEffect(() => {
@@ -560,7 +571,8 @@ const MentorDashboard = () => {
                       <Inbox className="w-4 h-4 text-primary" />
                       View Requests
                       {pendingRequests > 0 && (
-                        <span className="ml-auto bg-warning text-warning-foreground text-xs px-2 py-0.5 rounded-full">
+                        <span className="ml-auto flex items-center gap-1 bg-warning text-warning-foreground text-xs px-2 py-0.5 rounded-full">
+                          <Bell className="w-3 h-3" />
                           {pendingRequests}
                         </span>
                       )}
