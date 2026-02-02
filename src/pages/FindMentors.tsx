@@ -38,7 +38,8 @@ import {
   Check,
   ArrowLeft,
   FileText,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Clock
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
@@ -57,6 +58,8 @@ interface MentorWithProfile {
     avatar_url: string | null;
     email: string | null;
   } | null;
+  isConnected?: boolean;
+  hasPendingRequest?: boolean;
 }
 
 const FindMentors = () => {
@@ -125,6 +128,9 @@ const FindMentors = () => {
 
   const fetchMentors = async () => {
     try {
+      const currentSession = await supabase.auth.getSession();
+      const currentUserId = currentSession.data.session?.user.id;
+
       // Fetch all mentor profiles
       const { data: mentorProfiles, error: mentorError } = await supabase
         .from("mentor_profiles")
@@ -141,10 +147,33 @@ const FindMentors = () => {
 
       if (profileError) throw profileError;
 
+      // Fetch active mentorships for current user
+      let connectedMentorIds: string[] = [];
+      if (currentUserId) {
+        const { data: mentorships } = await supabase
+          .from("active_mentorships")
+          .select("mentor_id")
+          .eq("mentee_id", currentUserId);
+        connectedMentorIds = mentorships?.map(m => m.mentor_id) || [];
+      }
+
+      // Fetch pending requests for current user
+      let pendingRequestMentorIds: string[] = [];
+      if (currentUserId) {
+        const { data: pendingRequests } = await supabase
+          .from("mentorship_requests")
+          .select("mentor_id")
+          .eq("mentee_id", currentUserId)
+          .eq("status", "pending");
+        pendingRequestMentorIds = pendingRequests?.map(r => r.mentor_id) || [];
+      }
+
       // Merge the data
       const mentorsWithProfiles = mentorProfiles?.map(mentor => ({
         ...mentor,
-        profile: profiles?.find(p => p.user_id === mentor.user_id) || null
+        profile: profiles?.find(p => p.user_id === mentor.user_id) || null,
+        isConnected: connectedMentorIds.includes(mentor.user_id),
+        hasPendingRequest: pendingRequestMentorIds.includes(mentor.user_id),
       })) || [];
 
       setMentors(mentorsWithProfiles);
@@ -510,13 +539,25 @@ const FindMentors = () => {
                           <FileText className="w-4 h-4 mr-1" />
                           Query
                         </Button>
-                        <Button 
-                          size="sm" 
-                          onClick={() => handleRequestMentorship(mentor)}
-                          disabled={!mentor.is_available || (mentor.current_mentees || 0) >= (mentor.max_mentees || 5)}
-                        >
-                          Request
-                        </Button>
+                        {mentor.isConnected ? (
+                          <Badge className="bg-success/20 text-success border-success/30 px-3 py-1.5">
+                            <Check className="w-3 h-3 mr-1" />
+                            Mentor
+                          </Badge>
+                        ) : mentor.hasPendingRequest ? (
+                          <Badge variant="secondary" className="px-3 py-1.5">
+                            <Clock className="w-3 h-3 mr-1" />
+                            Pending
+                          </Badge>
+                        ) : (
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleRequestMentorship(mentor)}
+                            disabled={!mentor.is_available || (mentor.current_mentees || 0) >= (mentor.max_mentees || 5)}
+                          >
+                            Request
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardContent>

@@ -24,7 +24,8 @@ import {
   Search,
   Users,
   Save,
-  Calendar
+  Calendar,
+  MessageSquare
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -557,6 +558,14 @@ const MenteeDashboard = () => {
                     >
                       <Clock className="w-4 h-4 text-primary" />
                       My Requests
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 hover-lift" 
+                      onClick={() => navigate("/my-queries")}
+                    >
+                      <MessageSquare className="w-4 h-4 text-primary" />
+                      Queries
                     </Button>
                     <Button 
                       variant="outline" 
