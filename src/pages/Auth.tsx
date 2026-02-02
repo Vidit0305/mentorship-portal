@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { z } from "zod";
 
@@ -152,9 +153,12 @@ const Auth = () => {
           Back to Home
         </Link>
         
-        <h1 className="font-serif text-2xl font-semibold text-foreground mb-12">
-          MentorConnect
-        </h1>
+        <div className="mb-12">
+          <h1 className="text-2xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
+            IILM UNIVERSITY
+          </h1>
+          <span className="text-sm text-muted-foreground">Mentorship Portal</span>
+        </div>
 
         <h2 className="font-serif text-4xl xl:text-5xl font-semibold text-foreground leading-tight mb-6">
           {role === "mentor" ? "Guide the next" : "Find your path."}
@@ -181,128 +185,143 @@ const Auth = () => {
       </div>
 
       {/* Right Side - Auth Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-12 xl:px-20 py-12">
-        <div className="lg:hidden mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
+      <div className="w-full lg:w-1/2 flex flex-col px-6 md:px-12 xl:px-20 py-6">
+        {/* Top bar with back link and theme toggle */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="lg:hidden">
+            <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Link>
+          </div>
+          <div className="lg:hidden" />
+          <ThemeToggle />
         </div>
 
-        <div className="max-w-md w-full mx-auto">
-          <div className="text-center mb-8">
-            <h3 className="font-serif text-2xl font-semibold text-foreground mb-2">
-              {isSignUp ? "Create Account" : "Welcome Back"}
-            </h3>
-            <p className="text-muted-foreground">
-              {isSignUp 
-                ? `Sign up as a ${role} to get started.`
-                : "Enter your credentials to continue."}
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@university.edu"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-12 rounded-xl bg-card border-border"
-                required
-              />
-              {errors.email && (
-                <p className="text-xs text-destructive">{errors.email}</p>
-              )}
+        <div className="flex-1 flex flex-col justify-center">
+          <div className="max-w-md w-full mx-auto">
+            {/* Mobile branding */}
+            <div className="lg:hidden text-center mb-8">
+              <h1 className="text-xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
+                IILM UNIVERSITY
+              </h1>
+              <span className="text-sm text-muted-foreground">Mentorship Portal</span>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Password
-              </Label>
-              <div className="relative">
+            <div className="text-center mb-8">
+              <h3 className="font-serif text-2xl font-semibold text-foreground mb-2">
+                {isSignUp ? "Create Account" : "Welcome Back"}
+              </h3>
+              <p className="text-muted-foreground">
+                {isSignUp 
+                  ? `Sign up as a ${role} to get started.`
+                  : "Enter your credentials to continue."}
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Email
+                </Label>
                 <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 rounded-xl bg-card border-border pr-10"
+                  id="email"
+                  type="email"
+                  placeholder="name@university.edu"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-12 rounded-xl bg-card border-border"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+                {errors.email && (
+                  <p className="text-xs text-destructive">{errors.email}</p>
+                )}
               </div>
-              {errors.password && (
-                <p className="text-xs text-destructive">{errors.password}</p>
-              )}
-            </div>
 
-            {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Confirm Password
+                <Label htmlFor="password" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Password
                 </Label>
                 <div className="relative">
                   <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
+                    id="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="h-12 rounded-xl bg-card border-border pr-10"
                     required
                   />
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
-                {errors.confirmPassword && (
-                  <p className="text-xs text-destructive">{errors.confirmPassword}</p>
+                {errors.password && (
+                  <p className="text-xs text-destructive">{errors.password}</p>
                 )}
               </div>
-            )}
 
-            <Button
-              type="submit"
-              variant="heroPrimary"
-              className="w-full"
-              disabled={loading}
-            >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  {isSignUp ? "Sign Up" : "Sign In"} <span className="ml-1">→</span>
-                </>
+              {isSignUp && (
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    Confirm Password
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="h-12 rounded-xl bg-card border-border pr-10"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="text-xs text-destructive">{errors.confirmPassword}</p>
+                  )}
+                </div>
               )}
-            </Button>
-          </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-              <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-foreground font-semibold hover:underline"
+              <Button
+                type="submit"
+                variant="heroPrimary"
+                className="w-full"
+                disabled={loading}
               >
-                {isSignUp ? "Sign In" : "Sign up for free"}
-              </button>
-            </p>
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    {isSignUp ? "Sign Up" : "Sign In"} <span className="ml-1">→</span>
+                  </>
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-muted-foreground">
+                {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="text-foreground font-semibold hover:underline"
+                >
+                  {isSignUp ? "Sign In" : "Sign up for free"}
+                </button>
+              </p>
+            </div>
           </div>
         </div>
       </div>

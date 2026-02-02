@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { Footer } from "@/components/Footer";
 import { 
   User, 
   LogOut, 
@@ -257,15 +260,18 @@ const MentorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen hero-gradient">
+    <div className="min-h-screen hero-gradient flex flex-col pb-16 md:pb-0">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif text-xl font-semibold text-foreground">
-              MentorConnect
-            </h1>
-            <div className="flex items-center gap-4">
+            <Link to="/" className="flex flex-col">
+              <h1 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
+                IILM UNIVERSITY
+              </h1>
+              <span className="text-xs text-muted-foreground">Mentorship Portal</span>
+            </Link>
+            <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 {pendingRequests > 0 && (
@@ -274,6 +280,7 @@ const MentorDashboard = () => {
                   </span>
                 )}
               </Button>
+              <ThemeToggle />
               <Button variant="ghost" size="icon" onClick={handleSignOut}>
                 <LogOut className="w-5 h-5" />
               </Button>
@@ -555,6 +562,9 @@ const MentorDashboard = () => {
           </div>
         </div>
       </main>
+
+      <Footer />
+      <MobileBottomNav role="mentor" />
     </div>
   );
 };
