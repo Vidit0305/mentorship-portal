@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { Footer } from "@/components/Footer";
+import { RightSidebar } from "@/components/RightSidebar";
 import { 
   User, 
   LogOut, 
@@ -23,7 +24,6 @@ import {
   Users,
   Clock,
   CheckCircle,
-  Bell,
   Inbox
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
@@ -272,14 +272,6 @@ const MentorDashboard = () => {
               <span className="text-xs text-muted-foreground">Mentorship Portal</span>
             </Link>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-                {pendingRequests > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
-                    {pendingRequests}
-                  </span>
-                )}
-              </Button>
               <ThemeToggle />
               <Button variant="ghost" size="icon" onClick={handleSignOut}>
                 <LogOut className="w-5 h-5" />
@@ -564,6 +556,8 @@ const MentorDashboard = () => {
       </main>
 
       <Footer />
+      <MobileBottomNav role="mentor" />
+      <RightSidebar role="mentor" />
       <MobileBottomNav role="mentor" />
     </div>
   );
