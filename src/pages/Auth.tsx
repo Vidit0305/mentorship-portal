@@ -10,7 +10,10 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { z } from "zod";
 
-const emailSchema = z.string().email("Please enter a valid email address");
+const emailSchema = z.string().email("Please enter a valid email address").refine(
+  (email) => email.endsWith(".edu"),
+  { message: "Please use your university email (.edu)" }
+);
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 
 const Auth = () => {
@@ -96,9 +99,10 @@ const Auth = () => {
         if (error) {
           if (error.message.includes("already registered")) {
             toast({
-              title: "Account exists",
-              description: "This email is already registered. Please sign in instead.",
+              title: "Oops!",
+              description: "Looks like you already have an account. Try signing in instead!",
               variant: "destructive",
+              duration: 5000,
             });
           } else {
             throw error;
@@ -124,9 +128,10 @@ const Auth = () => {
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
             toast({
-              title: "Invalid credentials",
-              description: "Please check your email and password and try again.",
+              title: "Hmm, that didn't work",
+              description: "Double-check your email and password and give it another try!",
               variant: "destructive",
+              duration: 5000,
             });
           } else {
             throw error;
@@ -136,9 +141,10 @@ const Auth = () => {
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "An error occurred";
       toast({
-        title: "Error",
+        title: "Something went wrong",
         description: message,
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setLoading(false);
@@ -158,7 +164,7 @@ const Auth = () => {
           <h1 className="text-2xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
             IILM UNIVERSITY
           </h1>
-          <span className="text-sm text-primary font-medium">Mentorship Portal</span>
+          <span className="text-sm text-primary font-medium italic">Mentorship Portal</span>
         </div>
 
         <h2 className="font-serif text-4xl xl:text-5xl font-semibold text-foreground leading-tight mb-6">
@@ -206,7 +212,7 @@ const Auth = () => {
               <h1 className="text-xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                 IILM UNIVERSITY
               </h1>
-              <span className="text-sm text-primary font-medium">Mentorship Portal</span>
+              <span className="text-sm text-primary font-medium italic">Mentorship Portal</span>
             </div>
 
             <div className="text-center mb-8">

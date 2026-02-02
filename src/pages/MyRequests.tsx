@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
-import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { 
   User, 
@@ -176,7 +175,7 @@ const MyRequests = () => {
                 <h1 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                   IILM UNIVERSITY
                 </h1>
-                <span className="text-xs text-primary font-medium">Mentorship Portal</span>
+                <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -300,7 +299,6 @@ const MyRequests = () => {
         </div>
       </main>
 
-      <Footer />
       <MobileBottomNav role="mentee" />
       <DashboardSidebar role="mentee" />
     </div>

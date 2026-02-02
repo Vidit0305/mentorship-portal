@@ -43,7 +43,7 @@ const Index = () => {
               <h1 className="font-display font-semibold text-lg text-foreground">
                 IILM UNIVERSITY
               </h1>
-              <span className="text-[10px] text-primary font-medium -mt-1">Mentorship Portal</span>
+              <span className="text-[10px] text-primary font-medium italic -mt-1">Mentorship Portal</span>
             </div>
 
             {/* Center Navigation Links */}
@@ -173,7 +173,7 @@ const Index = () => {
       </section>
 
       {/* How it Works Section */}
-      <section id="how-it-works" className="py-20 bg-secondary/30">
+      <section id="how-it-works" className="py-20 bg-card border-y border-border">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <ScrollReveal>

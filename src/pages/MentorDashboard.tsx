@@ -12,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
-import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { ImageCropper } from "@/components/ImageCropper";
 import { PullToRefresh } from "@/components/PullToRefresh";
@@ -27,7 +26,8 @@ import {
   CheckCircle,
   Inbox,
   TrendingUp,
-  Bell
+  Bell,
+  MessageSquare
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -331,7 +331,7 @@ const MentorDashboard = () => {
               <h1 className="text-lg font-semibold text-foreground font-display">
                 IILM UNIVERSITY
               </h1>
-              <span className="text-xs text-primary font-medium">Mentorship Portal</span>
+              <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
             </Link>
             <div className="flex items-center gap-2">
               <ThemeToggle />
@@ -577,6 +577,30 @@ const MentorDashboard = () => {
                         </span>
                       )}
                     </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 hover-lift" 
+                      onClick={() => navigate("/my-mentees")}
+                    >
+                      <Users className="w-4 h-4 text-primary" />
+                      My Mentees
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 hover-lift" 
+                      onClick={() => navigate("/mentor-queries")}
+                    >
+                      <MessageSquare className="w-4 h-4 text-primary" />
+                      Queries
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 hover-lift text-destructive hover:text-destructive" 
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -585,7 +609,6 @@ const MentorDashboard = () => {
         </main>
       </PullToRefresh>
 
-      <Footer />
       <MobileBottomNav role="mentor" />
 
       {/* Image Cropper */}

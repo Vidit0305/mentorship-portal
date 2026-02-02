@@ -2,53 +2,50 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
-import { MenteeQueryForm } from "@/components/MenteeQueryForm";
 import { 
   User, 
   LogOut, 
   ArrowLeft,
-  MessageSquare,
-  Send
+  Users,
+  Mail
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
-interface ConnectedMentor {
+interface ConnectedMentee {
   id: string;
-  mentor_id: string;
+  mentee_id: string;
   started_at: string;
-  mentor_profile: {
+  mentee_profile: {
     full_name: string | null;
     avatar_url: string | null;
     email: string | null;
   } | null;
-  mentor_details: {
-    mentor_type: string;
-    expertise: string[] | null;
-    bio: string | null;
+  mentee_details: {
+    course: string | null;
+    year: string | null;
+    interests: string[] | null;
   } | null;
 }
 
-const MyMentor = () => {
+const MyMentees = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
   const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [mentors, setMentors] = useState<ConnectedMentor[]>([]);
+  const [mentees, setMentees] = useState<ConnectedMentee[]>([]);
   const [loading, setLoading] = useState(true);
-  const [queryFormOpen, setQueryFormOpen] = useState(false);
-  const [selectedMentor, setSelectedMentor] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session?.user) {
-        navigate("/auth?role=mentee");
+        navigate("/auth?role=mentor");
       } else {
         setUser(session.user);
       }
@@ -56,29 +53,29 @@ const MyMentor = () => {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session?.user) {
-        navigate("/auth?role=mentee");
+        navigate("/auth?role=mentor");
       } else {
         setUser(session.user);
-        fetchConnectedMentors(session.user.id);
+        fetchConnectedMentees(session.user.id);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const fetchConnectedMentors = async (userId: string) => {
+  const fetchConnectedMentees = async (userId: string) => {
     try {
       const { data: mentorships, error } = await supabase
         .from("active_mentorships")
         .select("*")
-        .eq("mentee_id", userId);
+        .eq("mentor_id", userId);
 
       if (error) throw error;
 
-      const mentorIds = mentorships?.map(m => m.mentor_id) || [];
+      const menteeIds = mentorships?.map(m => m.mentee_id) || [];
       
-      if (mentorIds.length === 0) {
-        setMentors([]);
+      if (menteeIds.length === 0) {
+        setMentees([]);
         setLoading(false);
         return;
       }
@@ -86,26 +83,27 @@ const MyMentor = () => {
       const { data: profiles } = await supabase
         .from("profiles")
         .select("user_id, full_name, avatar_url, email")
-        .in("user_id", mentorIds);
+        .in("user_id", menteeIds);
 
-      const { data: mentorProfiles } = await supabase
-        .from("mentor_profiles")
-        .select("user_id, mentor_type, expertise, bio")
-        .in("user_id", mentorIds);
+      const { data: menteeProfiles } = await supabase
+        .from("mentee_profiles")
+        .select("user_id, course, year, interests")
+        .in("user_id", menteeIds);
 
-      const connected: ConnectedMentor[] = mentorships?.map(m => ({
+      const connected: ConnectedMentee[] = mentorships?.map(m => ({
         ...m,
-        mentor_profile: profiles?.find(p => p.user_id === m.mentor_id) || null,
-        mentor_details: mentorProfiles?.find(mp => mp.user_id === m.mentor_id) || null,
+        mentee_profile: profiles?.find(p => p.user_id === m.mentee_id) || null,
+        mentee_details: menteeProfiles?.find(mp => mp.user_id === m.mentee_id) || null,
       })) || [];
 
-      setMentors(connected);
+      setMentees(connected);
     } catch (error) {
-      console.error("Error fetching mentors:", error);
+      console.error("Error fetching mentees:", error);
       toast({
-        title: "Error",
-        description: "Failed to load connected mentors",
+        title: "Oops!",
+        description: "Failed to load your mentees. Please try again.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setLoading(false);
@@ -115,11 +113,6 @@ const MyMentor = () => {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
-  };
-
-  const handleOpenQuery = (mentorId: string, mentorName: string) => {
-    setSelectedMentor({ id: mentorId, name: mentorName });
-    setQueryFormOpen(true);
   };
 
   const formatDate = (date: string) => {
@@ -133,7 +126,7 @@ const MyMentor = () => {
   if (loading) {
     return (
       <div className="min-h-screen hero-gradient flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading mentors...</div>
+        <div className="animate-pulse text-muted-foreground">Loading mentees...</div>
       </div>
     );
   }
@@ -145,10 +138,10 @@ const MyMentor = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/mentee-dashboard")}>
+              <Button variant="ghost" size="icon" onClick={() => navigate("/mentor-dashboard")}>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <Link to="/" className="flex flex-col">
+              <Link to="/" className="flex flex-col items-center">
                 <h1 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                   IILM UNIVERSITY
                 </h1>
@@ -170,32 +163,32 @@ const MyMentor = () => {
           {/* Page Header */}
           <div className="mb-8">
             <h2 className="font-serif text-3xl font-semibold text-foreground mb-2">
-              My Mentors
+              My Mentees
             </h2>
             <p className="text-muted-foreground">
-              View your connected mentors and send queries.
+              View and manage your connected mentees.
             </p>
           </div>
 
-          {mentors.length === 0 ? (
+          {mentees.length === 0 ? (
             <div className="text-center py-16">
-              <MessageSquare className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-              <h3 className="font-serif text-xl text-foreground mb-2">No Connected Mentors</h3>
+              <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+              <h3 className="font-serif text-xl text-foreground mb-2">No Mentees Yet</h3>
               <p className="text-muted-foreground mb-4">
-                You haven't been connected with any mentors yet.
+                You haven't accepted any mentees yet.
               </p>
-              <Button onClick={() => navigate("/find-mentors")}>
-                Find Mentors
+              <Button onClick={() => navigate("/mentor-requests")}>
+                View Requests
               </Button>
             </div>
           ) : (
             <div className="space-y-4">
-              {mentors.map((mentor) => (
-                <Card key={mentor.id} className="glass-card overflow-hidden">
+              {mentees.map((mentee) => (
+                <Card key={mentee.id} className="glass-card overflow-hidden">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <Avatar className="w-16 h-16 border-2 border-background">
-                        <AvatarImage src={mentor.mentor_profile?.avatar_url || ""} />
+                        <AvatarImage src={mentee.mentee_profile?.avatar_url || ""} />
                         <AvatarFallback className="bg-primary/10 text-primary">
                           <User className="w-8 h-8" />
                         </AvatarFallback>
@@ -203,48 +196,39 @@ const MyMentor = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-serif text-lg font-semibold text-foreground">
-                            {mentor.mentor_profile?.full_name || "Mentor"}
+                            {mentee.mentee_profile?.full_name || "Mentee"}
                           </h3>
-                          <Badge className="bg-success/20 text-success border-success/30 capitalize">
-                            {mentor.mentor_details?.mentor_type} Mentor
+                          <Badge className="bg-success/20 text-success border-success/30">
+                            Active
                           </Badge>
                         </div>
                         
-                        {mentor.mentor_profile?.email && (
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {mentor.mentor_profile.email}
+                        {mentee.mentee_profile?.email && (
+                          <p className="text-sm text-muted-foreground flex items-center gap-2 mb-2">
+                            <Mail className="w-4 h-4" />
+                            {mentee.mentee_profile.email}
                           </p>
                         )}
 
-                        {mentor.mentor_details?.bio && (
-                          <p className="text-sm text-foreground line-clamp-2 mb-3">
-                            {mentor.mentor_details.bio}
+                        {mentee.mentee_details?.course && (
+                          <p className="text-sm text-foreground mb-2">
+                            {mentee.mentee_details.course} • {mentee.mentee_details.year}
                           </p>
                         )}
 
-                        {mentor.mentor_details?.expertise && mentor.mentor_details.expertise.length > 0 && (
+                        {mentee.mentee_details?.interests && mentee.mentee_details.interests.length > 0 && (
                           <div className="flex flex-wrap gap-1 mb-3">
-                            {mentor.mentor_details.expertise.slice(0, 4).map((skill, i) => (
+                            {mentee.mentee_details.interests.slice(0, 4).map((interest, i) => (
                               <Badge key={i} variant="secondary" className="text-xs">
-                                {skill}
+                                {interest}
                               </Badge>
                             ))}
                           </div>
                         )}
                         
-                        <div className="flex items-center justify-between">
-                          <p className="text-xs text-muted-foreground">
-                            Connected since {formatDate(mentor.started_at)}
-                          </p>
-                          <Button
-                            size="sm"
-                            onClick={() => handleOpenQuery(mentor.mentor_id, mentor.mentor_profile?.full_name || "Mentor")}
-                            className="gap-2"
-                          >
-                            <Send className="w-4 h-4" />
-                            Send Query
-                          </Button>
-                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Connected since {formatDate(mentee.started_at)}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -255,20 +239,10 @@ const MyMentor = () => {
         </div>
       </main>
 
-      <MobileBottomNav role="mentee" />
-      <DashboardSidebar role="mentee" />
-
-      {/* Query Form Modal */}
-      {selectedMentor && (
-        <MenteeQueryForm
-          open={queryFormOpen}
-          onOpenChange={setQueryFormOpen}
-          mentorId={selectedMentor.id}
-          mentorName={selectedMentor.name}
-        />
-      )}
+      <MobileBottomNav role="mentor" />
+      <DashboardSidebar role="mentor" />
     </div>
   );
 };
 
-export default MyMentor;
+export default MyMentees;

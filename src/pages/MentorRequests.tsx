@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
-import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import {
   Dialog,
@@ -254,7 +253,7 @@ const MentorRequests = () => {
                 <h1 className="text-lg font-semibold text-foreground font-display">
                   IILM UNIVERSITY
                 </h1>
-                <span className="text-xs text-primary font-medium">Mentorship Portal</span>
+                <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
               </div>
             </Link>
             <div className="flex items-center gap-2">
@@ -424,7 +423,6 @@ const MentorRequests = () => {
         </div>
       </main>
 
-      <Footer />
       <MobileBottomNav role="mentor" />
 
       {/* Rejection Dialog */}

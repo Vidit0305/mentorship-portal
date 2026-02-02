@@ -88,9 +88,11 @@ export type Database = {
           id: string
           mentee_id: string
           mentor_id: string
+          mentor_reply: string | null
           mentorship_duration: string
           mentorship_type: string
           query_description: string
+          replied_at: string | null
           share_token: string
           university_name: string
           updated_at: string
@@ -106,9 +108,11 @@ export type Database = {
           id?: string
           mentee_id: string
           mentor_id: string
+          mentor_reply?: string | null
           mentorship_duration: string
           mentorship_type: string
           query_description: string
+          replied_at?: string | null
           share_token?: string
           university_name: string
           updated_at?: string
@@ -124,9 +128,11 @@ export type Database = {
           id?: string
           mentee_id?: string
           mentor_id?: string
+          mentor_reply?: string | null
           mentorship_duration?: string
           mentorship_type?: string
           query_description?: string
+          replied_at?: string | null
           share_token?: string
           university_name?: string
           updated_at?: string
@@ -140,8 +146,10 @@ export type Database = {
           bio: string | null
           created_at: string
           current_mentees: number | null
+          domain: string[] | null
           experience: string | null
           expertise: string[] | null
+          help_type: string[] | null
           id: string
           is_available: boolean | null
           max_mentees: number | null
@@ -154,8 +162,10 @@ export type Database = {
           bio?: string | null
           created_at?: string
           current_mentees?: number | null
+          domain?: string[] | null
           experience?: string | null
           expertise?: string[] | null
+          help_type?: string[] | null
           id?: string
           is_available?: boolean | null
           max_mentees?: number | null
@@ -168,8 +178,10 @@ export type Database = {
           bio?: string | null
           created_at?: string
           current_mentees?: number | null
+          domain?: string[] | null
           experience?: string | null
           expertise?: string[] | null
+          help_type?: string[] | null
           id?: string
           is_available?: boolean | null
           max_mentees?: number | null
