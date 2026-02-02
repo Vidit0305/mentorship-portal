@@ -31,16 +31,16 @@ import {
 import { Loader2, Copy, Check, Share2 } from "lucide-react";
 
 const formSchema = z.object({
-  full_name: z.string().min(2, "Name must be at least 2 characters").max(100),
-  course_program_year: z.string().min(2, "Required").max(100),
-  university_name: z.string().min(2, "Required").max(200),
-  email: z.string().email("Invalid email address").max(255),
+  full_name: z.string().min(2, "Name must be at least 2 characters").max(150),
+  course_program_year: z.string().min(2, "Required").max(150),
+  university_name: z.string().min(2, "Required").max(150),
+  email: z.string().email("Invalid email address").max(150),
   mentorship_type: z.string().min(1, "Please select a type"),
-  domain_guidance: z.string().min(2, "Required").max(200),
-  query_description: z.string().min(10, "Please provide more details").max(1000),
-  expected_outcome: z.string().min(10, "Please provide more details").max(500),
+  domain_guidance: z.string().min(2, "Required").max(150),
+  query_description: z.string().min(10, "Please provide more details").max(150, "Maximum 150 characters"),
+  expected_outcome: z.string().min(10, "Please provide more details").max(150, "Maximum 150 characters"),
   mentorship_duration: z.string().min(1, "Please select a duration"),
-  why_this_mentor: z.string().min(10, "Please provide more details").max(500),
+  why_this_mentor: z.string().min(10, "Please provide more details").max(150, "Maximum 150 characters"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -161,14 +161,8 @@ export const MenteeQueryForm = ({
               </div>
               <h3 className="font-semibold text-lg mb-2">Query Submitted Successfully!</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                Your query has been sent to the mentor. You can also share this link:
+                Your query has been sent to the mentor. They will review and respond to you soon.
               </p>
-            </div>
-            <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-              <Input value={shareableLink} readOnly className="flex-1 text-sm" />
-              <Button size="icon" variant="outline" onClick={handleCopyLink}>
-                {copied ? <Check className="w-4 h-4 text-success" /> : <Copy className="w-4 h-4" />}
-              </Button>
             </div>
             <Button className="w-full" onClick={handleClose}>
               Done
@@ -281,10 +275,12 @@ export const MenteeQueryForm = ({
                     <FormControl>
                       <Textarea
                         placeholder="What exactly do you need help with?"
-                        rows={3}
+                        rows={2}
+                        maxLength={150}
                         {...field}
                       />
                     </FormControl>
+                    <p className="text-xs text-muted-foreground text-right">{field.value?.length || 0}/150</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -300,9 +296,11 @@ export const MenteeQueryForm = ({
                       <Textarea
                         placeholder="Describe your expected outcomes..."
                         rows={2}
+                        maxLength={150}
                         {...field}
                       />
                     </FormControl>
+                    <p className="text-xs text-muted-foreground text-right">{field.value?.length || 0}/150</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -341,9 +339,11 @@ export const MenteeQueryForm = ({
                       <Textarea
                         placeholder="Explain why you selected this mentor..."
                         rows={2}
+                        maxLength={150}
                         {...field}
                       />
                     </FormControl>
+                    <p className="text-xs text-muted-foreground text-right">{field.value?.length || 0}/150</p>
                     <FormMessage />
                   </FormItem>
                 )}

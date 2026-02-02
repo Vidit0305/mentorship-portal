@@ -12,6 +12,7 @@ import MenteeDashboard from "./pages/MenteeDashboard";
 import MentorDashboard from "./pages/MentorDashboard";
 import FindMentors from "./pages/FindMentors";
 import MyRequests from "./pages/MyRequests";
+import MyMentor from "./pages/MyMentor";
 import MentorRequests from "./pages/MentorRequests";
 import QueryView from "./pages/QueryView";
 import NotFound from "./pages/NotFound";
@@ -52,6 +53,7 @@ const App = () => {
               <Route path="/mentor-dashboard" element={<MentorDashboard />} />
               <Route path="/find-mentors" element={<FindMentors />} />
               <Route path="/my-requests" element={<MyRequests />} />
+              <Route path="/my-mentor" element={<MyMentor />} />
               <Route path="/mentor-requests" element={<MentorRequests />} />
               <Route path="/query/:token" element={<QueryView />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

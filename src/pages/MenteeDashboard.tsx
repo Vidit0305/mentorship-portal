@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { ImageCropper } from "@/components/ImageCropper";
 import { PullToRefresh } from "@/components/PullToRefresh";
+import { useUserChartData, ChartFilterType } from "@/hooks/useUserChartData";
 import { 
   User, 
   LogOut, 
@@ -23,10 +24,18 @@ import {
   TrendingUp,
   Search,
   Users,
-  Save
+  Save,
+  Calendar
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Profile {
   id: string;
@@ -78,15 +87,9 @@ const MenteeDashboard = () => {
   const [acceptedMentors, setAcceptedMentors] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
 
-  // Chart data
-  const chartData = [
-    { month: "Jan", mentors: 0 },
-    { month: "Feb", mentors: 1 },
-    { month: "Mar", mentors: 1 },
-    { month: "Apr", mentors: 2 },
-    { month: "May", mentors: 2 },
-    { month: "Jun", mentors: acceptedMentors },
-  ];
+  // Chart filter
+  const [chartFilter, setChartFilter] = useState<ChartFilterType>("month");
+  const { chartData } = useUserChartData(user?.id, chartFilter);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -319,11 +322,11 @@ const MenteeDashboard = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex flex-col">
+            <Link to="/" className="flex flex-col items-center">
               <h1 className="text-lg font-semibold text-foreground font-display">
                 IILM UNIVERSITY
               </h1>
-              <span className="text-xs text-muted-foreground">Mentorship Portal</span>
+              <span className="text-xs text-primary font-medium">Mentorship Portal</span>
             </Link>
             <div className="flex items-center gap-2">
               <ThemeToggle />
@@ -473,9 +476,22 @@ const MenteeDashboard = () => {
                 {/* Growth Chart */}
                 <Card className="glass-card">
                   <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-primary" />
-                      <CardTitle className="font-serif text-lg">Insights</CardTitle>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                        <CardTitle className="font-serif text-lg">Insights</CardTitle>
+                      </div>
+                      <Select value={chartFilter} onValueChange={(v) => setChartFilter(v as ChartFilterType)}>
+                        <SelectTrigger className="w-24 h-8 text-xs">
+                          <Calendar className="w-3 h-3 mr-1" />
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="day">Day</SelectItem>
+                          <SelectItem value="month">Month</SelectItem>
+                          <SelectItem value="year">Year</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <p className="text-xs text-muted-foreground">Mentors connected over time</p>
                   </CardHeader>
@@ -490,7 +506,7 @@ const MenteeDashboard = () => {
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis dataKey="month" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+                          <XAxis dataKey="label" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
                           <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
                           <Tooltip 
                             contentStyle={{ 
@@ -522,6 +538,14 @@ const MenteeDashboard = () => {
                     <Button 
                       variant="outline" 
                       className="w-full justify-start gap-3 hover-lift" 
+                      onClick={() => navigate("/my-mentor")}
+                    >
+                      <Users className="w-4 h-4 text-primary" />
+                      My Mentor
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 hover-lift" 
                       onClick={() => navigate("/find-mentors")}
                     >
                       <Search className="w-4 h-4 text-primary" />
@@ -532,8 +556,16 @@ const MenteeDashboard = () => {
                       className="w-full justify-start gap-3 hover-lift" 
                       onClick={() => navigate("/my-requests")}
                     >
-                      <Users className="w-4 h-4 text-primary" />
+                      <Clock className="w-4 h-4 text-primary" />
                       My Requests
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-3 hover-lift text-destructive hover:text-destructive" 
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
                     </Button>
                   </CardContent>
                 </Card>

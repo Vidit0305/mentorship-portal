@@ -172,11 +172,11 @@ const MyRequests = () => {
               <Button variant="ghost" size="icon" onClick={() => navigate("/mentee-dashboard")}>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <Link to="/" className="flex flex-col">
+              <Link to="/" className="flex flex-col items-center">
                 <h1 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                   IILM UNIVERSITY
                 </h1>
-                <span className="text-xs text-muted-foreground">Mentorship Portal</span>
+                <span className="text-xs text-primary font-medium">Mentorship Portal</span>
               </Link>
             </div>
             <div className="flex items-center gap-2">
