@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { Footer } from "@/components/Footer";
-import { RightSidebar } from "@/components/RightSidebar";
+import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { MentorshipRequestDialog } from "@/components/MentorshipRequestDialog";
 import {
   Select,
@@ -349,7 +349,7 @@ const FindMentors = () => {
 
       <Footer />
       <MobileBottomNav role="mentee" />
-      <RightSidebar role="mentee" />
+      <DashboardSidebar role="mentee" />
 
       {/* Request Dialog */}
       {selectedMentor && (

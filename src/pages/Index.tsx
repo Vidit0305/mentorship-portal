@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Footer } from "@/components/Footer";
-import { ArrowRight, Users, BookOpen, Award, CheckCircle, MessageSquare, X, Star, Send } from "lucide-react";
+import { ScrollReveal } from "@/components/ScrollReveal";
+import { ArrowRight, Users, BookOpen, Award, CheckCircle, MessageSquare, Star, Send } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -39,80 +40,118 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen hero-gradient flex flex-col">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col">
-            <h1 className="font-semibold text-xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
-              IILM UNIVERSITY
-            </h1>
-            <span className="text-xs text-muted-foreground">Mentorship Portal</span>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Fixed Top Navigation */}
+      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex flex-col">
+              <h1 className="font-display font-semibold text-lg text-foreground">
+                IILM UNIVERSITY
+              </h1>
+              <span className="text-[10px] text-muted-foreground -mt-1">Mentorship Portal</span>
+            </div>
+
+            {/* Center Navigation Links */}
+            <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+              <a 
+                href="#features" 
+                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
+              >
+                Features
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </a>
+              <a 
+                href="#how-it-works" 
+                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
+              >
+                How it Works
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </a>
+              <button 
+                onClick={() => setAboutOpen(true)}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
+              >
+                About
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </button>
+              <button 
+                onClick={() => setFeedbackOpen(true)}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors relative group"
+              >
+                Send Feedback
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </button>
+            </div>
+            
+            <ThemeToggle />
           </div>
-          
-          <ThemeToggle />
-        </div>
-        
-        {/* Center Navigation Links - Below header on separate line */}
-        <div className="flex items-center justify-center gap-6 md:gap-10 mt-4 text-sm">
-          <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-            Features
-          </a>
-          <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
-            How it Works
-          </a>
-          <button 
-            onClick={() => setAboutOpen(true)}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            About
-          </button>
-          <button 
-            onClick={() => setFeedbackOpen(true)}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Send Feedback
-          </button>
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden items-center justify-center gap-4 pb-3 text-xs">
+            <a href="#features" className="text-muted-foreground hover:text-primary transition-colors">
+              Features
+            </a>
+            <a href="#how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
+              How it Works
+            </a>
+            <button onClick={() => setAboutOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
+              About
+            </button>
+            <button onClick={() => setFeedbackOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
+              Feedback
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24 flex-1">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-semibold text-foreground leading-tight mb-6 animate-fade-in">
-            Find Your Perfect
-            <span className="block italic text-primary">Mentor</span>
-          </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-            Connect with experienced seniors, alumni, and faculty to guide your academic and professional journey.
-          </p>
+          <ScrollReveal>
+            <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-semibold text-foreground leading-tight mb-6">
+              Find Your Perfect
+              <span className="block italic text-primary">Mentor</span>
+            </h2>
+          </ScrollReveal>
+          
+          <ScrollReveal delay={100}>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
+              Connect with experienced seniors, alumni, and faculty to guide your academic and professional journey.
+            </p>
+          </ScrollReveal>
 
           {/* Role Selection - Simple Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-            <Link to="/auth?role=mentee">
-              <Button variant="heroPrimary" className="min-w-[200px]">
-                I am a Mentee <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+          <ScrollReveal delay={200}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/auth?role=mentee">
+                <Button variant="heroPrimary" className="min-w-[200px] hover-glow">
+                  I am a Mentee <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
 
-            <Link to="/auth?role=mentor">
-              <Button variant="heroSecondary" className="min-w-[200px]">
-                I am a Mentor <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
+              <Link to="/auth?role=mentor">
+                <Button variant="heroSecondary" className="min-w-[200px] hover-lift">
+                  I am a Mentor <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Features Section */}
       <section id="features" className="container mx-auto px-4 py-20">
         <div className="max-w-6xl mx-auto">
-          <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-4 text-center">
-            Platform Features
-          </h3>
-          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-16">
-            Everything you need to connect with the right mentors and grow your career.
-          </p>
+          <ScrollReveal>
+            <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-4 text-center">
+              Platform Features
+            </h3>
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-16">
+              Everything you need to connect with the right mentors and grow your career.
+            </p>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -137,80 +176,90 @@ const Index = () => {
                 description: "Build meaningful relationships that support your journey."
               }
             ].map((feature, index) => (
-              <div key={index} className="feature-card animate-slide-up" style={{ animationDelay: `${0.1 * index}s` }}>
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-primary" />
+              <ScrollReveal key={index} delay={index * 100}>
+                <div className="feature-card h-full">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                    <feature.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h4 className="font-serif text-lg font-semibold text-foreground mb-2">{feature.title}</h4>
+                  <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </div>
-                <h4 className="font-serif text-lg font-semibold text-foreground mb-2">{feature.title}</h4>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* How it Works Section */}
-      <section id="how-it-works" className="container mx-auto px-4 py-20 bg-accent/30">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-4 text-center">
-            How It Works
-          </h3>
-          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-16">
-            A simple process to connect students with the right mentors.
-          </p>
+      <section id="how-it-works" className="py-20 bg-secondary/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <ScrollReveal>
+              <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-4 text-center">
+                How It Works
+              </h3>
+              <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-16">
+                A simple process to connect students with the right mentors.
+              </p>
+            </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                step: "01",
-                title: "Create Profile",
-                description: "Sign up and complete your profile with your interests and goals."
-              },
-              {
-                step: "02",
-                title: "Find Mentors",
-                description: "Browse mentors filtered by expertise, domain, and availability."
-              },
-              {
-                step: "03",
-                title: "Connect & Grow",
-                description: "Send requests, get accepted, and start your mentorship journey."
-              }
-            ].map((item, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-primary font-bold text-xl">{item.step}</span>
-                </div>
-                <h4 className="font-serif text-xl font-semibold text-foreground mb-2">{item.title}</h4>
-                <p className="text-muted-foreground">{item.description}</p>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  step: "01",
+                  title: "Create Profile",
+                  description: "Sign up and complete your profile with your interests and goals."
+                },
+                {
+                  step: "02",
+                  title: "Find Mentors",
+                  description: "Browse mentors filtered by expertise, domain, and availability."
+                },
+                {
+                  step: "03",
+                  title: "Connect & Grow",
+                  description: "Send requests, get accepted, and start your mentorship journey."
+                }
+              ].map((item, index) => (
+                <ScrollReveal key={index} delay={index * 150} direction="up">
+                  <div className="text-center group">
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-all duration-300 group-hover:scale-110">
+                      <span className="text-primary font-bold text-xl">{item.step}</span>
+                    </div>
+                    <h4 className="font-serif text-xl font-semibold text-foreground mb-2">{item.title}</h4>
+                    <p className="text-muted-foreground">{item.description}</p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="max-w-3xl mx-auto text-center">
-          <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-6">
-            Ready to start your mentorship journey?
-          </h3>
-          <p className="text-muted-foreground mb-8">
-            Join our community of students and mentors committed to growth and success.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/auth?role=mentee">
-              <Button variant="heroPrimary">
-                Get Started <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link to="/auth?role=mentor">
-              <Button variant="heroSecondary">
-                Become a Mentor <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
+        <ScrollReveal>
+          <div className="max-w-3xl mx-auto text-center">
+            <h3 className="font-serif text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              Ready to start your mentorship journey?
+            </h3>
+            <p className="text-muted-foreground mb-8">
+              Join our community of students and mentors committed to growth and success.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/auth?role=mentee">
+                <Button variant="heroPrimary" className="hover-glow">
+                  Get Started <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <Link to="/auth?role=mentor">
+                <Button variant="heroSecondary" className="hover-lift">
+                  Become a Mentor <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* Footer */}
@@ -295,7 +344,7 @@ const Index = () => {
                   <button
                     key={star}
                     onClick={() => setRating(star)}
-                    className="focus:outline-none"
+                    className="focus:outline-none transition-transform hover:scale-110"
                   >
                     <Star
                       className={`w-8 h-8 transition-colors ${
