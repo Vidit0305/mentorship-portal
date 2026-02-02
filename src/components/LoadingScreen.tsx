@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sparkles } from "lucide-react";
+import mentorshipLogo from "@/assets/mentorship-logo.png";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -26,10 +26,8 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background">
       {/* Header */}
-      <div className="absolute top-6 left-6 flex items-center gap-2">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-          <Sparkles className="w-5 h-5 text-primary-foreground" />
-        </div>
+      <div className="absolute top-6 left-6 flex items-center gap-3">
+        <img src={mentorshipLogo} alt="Mentorship Portal" className="w-10 h-10 object-contain" />
         <span className="font-display font-semibold text-lg text-foreground">
           Mentorship Portal
         </span>
@@ -37,16 +35,18 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
       {/* Main Content */}
       <div className="flex flex-col items-center gap-8">
-        {/* Animated Icon */}
+        {/* Animated Logo */}
         <div className="relative">
-          <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">
-            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-              <Sparkles className="w-8 h-8 text-primary animate-spin-slow" />
-            </div>
+          <div className="w-28 h-28 rounded-full bg-primary/10 flex items-center justify-center animate-pulse-soft">
+            <img 
+              src={mentorshipLogo} 
+              alt="Mentorship Portal" 
+              className="w-20 h-20 object-contain"
+            />
           </div>
           {/* Rotating ring */}
           <svg
-            className="absolute inset-0 w-24 h-24 animate-spin-slow"
+            className="absolute inset-0 w-28 h-28 animate-spin-slow"
             viewBox="0 0 100 100"
           >
             <circle

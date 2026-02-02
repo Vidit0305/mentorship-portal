@@ -188,9 +188,10 @@ export const DashboardSidebar = ({ role }: DashboardSidebarProps) => {
                   <item.icon className="w-5 h-5" />
                   <span className="font-medium">{item.label}</span>
                   {item.label === "Notifications" && counts.pending > 0 && (
-                    <Badge variant="destructive" className="ml-auto text-xs">
+                    <span className="ml-auto flex items-center gap-1 bg-warning/20 text-warning text-xs px-2 py-0.5 rounded-full">
+                      <Bell className="w-3 h-3 fill-warning" />
                       {counts.pending}
-                    </Badge>
+                    </span>
                   )}
                 </button>
               ))}

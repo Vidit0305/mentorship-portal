@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
+import { forwardRef } from "react";
 
-export function Footer() {
-  const footerLinks = [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms & Conditions", href: "/terms" },
-    { label: "Disclaimer", href: "/disclaimer" },
-    { label: "Community Guidelines", href: "/community-guidelines" },
-    { label: "Cookie Policy", href: "/cookie-policy" },
-    { label: "Refund & Cancellation", href: "/refund" },
-  ];
+const footerLinks = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Disclaimer", href: "/disclaimer" },
+  { label: "Community Guidelines", href: "/community-guidelines" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
+  { label: "Refund & Cancellation", href: "/refund" },
+];
 
+export const Footer = forwardRef<HTMLElement>((props, ref) => {
   return (
-    <footer className="border-t border-border bg-background">
+    <footer ref={ref} className="border-t border-border bg-background" {...props}>
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-4">
           {footerLinks.map((link, index) => (
@@ -25,9 +26,11 @@ export function Footer() {
           ))}
         </div>
         <p className="text-center text-xs text-muted-foreground">
-          © 2026 Edunexinfo. All rights reserved.
+          © 2026 Mentorship Portal. All Rights Reserved.
         </p>
       </div>
     </footer>
   );
-}
+});
+
+Footer.displayName = "Footer";
