@@ -71,13 +71,13 @@ const Index = () => {
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <div className="flex flex-col items-center">
-              <h1 className="font-display font-semibold text-xl md:text-2xl lg:text-3xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
+            {/* Logo - Clickable to reload */}
+            <button onClick={() => window.location.reload()} className="flex flex-col items-center hover:opacity-80 transition-opacity">
+              <h1 className="font-display font-semibold text-2xl md:text-3xl lg:text-4xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                 IILM UNIVERSITY
               </h1>
-              <span className="text-xs md:text-sm text-primary font-medium italic -mt-1">Mentorship Portal</span>
-            </div>
+              <span className="text-sm md:text-base text-primary font-medium italic -mt-1">Mentorship Portal</span>
+            </button>
 
             {/* Center Navigation Links - Desktop Only */}
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">

@@ -20,21 +20,20 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
 
   return (
     <>
-      {/* Hide footer on mobile */}
-      <footer ref={ref} className="hidden md:block border-t border-border bg-background" {...props}>
+      <footer ref={ref} className="border-t border-border bg-background" {...props}>
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 md:gap-x-6 gap-y-2 mb-4">
             {footerLinks.map((link, index) => (
               <button
                 key={index}
                 onClick={() => setImageOpen(true)}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="text-[10px] md:text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.label}
               </button>
             ))}
           </div>
-          <p className="text-center text-xs text-muted-foreground">
+          <p className="text-center text-[10px] md:text-xs text-muted-foreground">
             © 2026 Mentorship Portal. All Rights Reserved.
           </p>
         </div>

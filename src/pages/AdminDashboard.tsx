@@ -415,12 +415,12 @@ const AdminDashboard = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex flex-col items-center">
+            <button onClick={() => window.location.href = '/'} className="flex flex-col items-center hover:opacity-80 transition-opacity">
               <h1 className="text-xl md:text-2xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                 IILM UNIVERSITY
               </h1>
               <span className="text-xs md:text-sm text-primary font-medium italic">Admin Portal</span>
-            </Link>
+            </button>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="hidden md:flex items-center gap-1 bg-primary/10 text-primary border-primary/30">
                 <Shield className="w-3 h-3" />

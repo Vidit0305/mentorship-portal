@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
+
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import {
   Dialog,
@@ -242,12 +242,12 @@ const MentorRequests = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-16 md:pb-0">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/mentor-dashboard" className="flex items-center gap-2">
+            <button onClick={() => window.location.href = '/'} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <ChevronLeft className="w-5 h-5 text-muted-foreground" />
               <div className="flex flex-col items-center">
                 <h1 className="text-lg font-semibold text-foreground font-display">
@@ -255,7 +255,7 @@ const MentorRequests = () => {
                 </h1>
                 <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
               </div>
-            </Link>
+            </button>
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <Button variant="ghost" size="icon" onClick={handleSignOut}>
@@ -423,7 +423,7 @@ const MentorRequests = () => {
         </div>
       </main>
 
-      <MobileBottomNav role="mentor" />
+      
 
       {/* Rejection Dialog */}
       <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
