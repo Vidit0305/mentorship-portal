@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
+
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { MentorshipRequestDialog } from "@/components/MentorshipRequestDialog";
 import { MenteeQueryForm } from "@/components/MenteeQueryForm";
@@ -459,7 +459,7 @@ const FindMentors = () => {
   }
 
   return (
-    <div className="min-h-screen hero-gradient flex flex-col pb-16 md:pb-0">
+    <div className="min-h-screen hero-gradient flex flex-col">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -468,12 +468,12 @@ const FindMentors = () => {
               <Button variant="ghost" size="icon" onClick={() => navigate("/mentee-dashboard")}>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <Link to="/" className="flex flex-col items-center">
+              <button onClick={() => window.location.href = '/'} className="flex flex-col items-center hover:opacity-80 transition-opacity">
                 <h1 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                   IILM UNIVERSITY
                 </h1>
                 <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
-              </Link>
+              </button>
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
@@ -641,59 +641,57 @@ const FindMentors = () => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {filteredMentors.map((mentor) => (
                 <Card key={mentor.user_id} className="glass-card overflow-hidden hover:shadow-medium transition-shadow">
-                  <CardHeader className="pb-4">
-                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start gap-4">
                       <button
                         onClick={() => handleOpenProfileDialog(mentor)}
-                        className="focus:outline-none focus:ring-2 focus:ring-primary rounded-full transition-transform hover:scale-105"
+                        className="focus:outline-none focus:ring-2 focus:ring-primary rounded-full transition-transform hover:scale-105 shrink-0"
                       >
-                        <Avatar className="w-14 h-14 sm:w-16 sm:h-16 border-2 border-background shadow-soft cursor-pointer">
+                        <Avatar className="w-14 h-14 border-2 border-background shadow-soft cursor-pointer">
                           <AvatarImage src={mentor.profile?.avatar_url || ""} />
-                          <AvatarFallback className="bg-primary/10 text-primary text-lg">
-                            <User className="w-6 h-6 sm:w-8 sm:h-8" />
+                          <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+                            {mentor.profile?.full_name?.split(' ').map(n => n[0]).join('').slice(0, 2) || <User className="w-6 h-6" />}
                           </AvatarFallback>
                         </Avatar>
                       </button>
-                      <div className="flex-1 min-w-0 text-center sm:text-left">
-                        <h3 className="font-serif text-sm sm:text-lg font-semibold text-foreground truncate">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-serif text-base font-semibold text-foreground truncate">
                           {mentor.profile?.full_name || "Anonymous Mentor"}
                         </h3>
-                        <div className="flex items-center justify-center sm:justify-start gap-1 sm:gap-2 mt-1 flex-wrap">
+                        <div className="flex items-center gap-2 mt-1">
                           <Badge variant="secondary" className="flex items-center gap-1 text-xs">
                             {getMentorTypeIcon(mentor.mentor_type)}
-                            <span className="hidden sm:inline">{getMentorTypeLabel(mentor.mentor_type)}</span>
                           </Badge>
                           {mentor.is_available && (
                             <Badge variant="outline" className="text-success border-success/30 bg-success/10 text-xs">
-                              <Check className="w-3 h-3 sm:mr-1" />
-                              <span className="hidden sm:inline">Available</span>
+                              <Check className="w-3 h-3" />
                             </Badge>
                           )}
                         </div>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-3 sm:space-y-4">
+                  <CardContent className="space-y-3 pt-0">
                     {mentor.bio && (
-                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                      <p className="text-xs text-muted-foreground line-clamp-2">
                         {mentor.bio}
                       </p>
                     )}
                     
                     {mentor.expertise && mentor.expertise.length > 0 && (
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Expertise</p>
+                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5">Expertise</p>
                         <div className="flex flex-wrap gap-1">
                           {mentor.expertise.slice(0, 2).map((exp, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">
+                            <Badge key={i} variant="outline" className="text-[10px] px-2 py-0.5">
                               {exp}
                             </Badge>
                           ))}
                           {mentor.expertise.length > 2 && (
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-[10px] px-2 py-0.5">
                               +{mentor.expertise.length - 2}
                             </Badge>
                           )}
@@ -701,39 +699,35 @@ const FindMentors = () => {
                       </div>
                     )}
 
-                    <div className="flex flex-col sm:flex-row items-center justify-between pt-2 gap-2">
+                    <div className="flex items-center justify-between pt-2 border-t border-border/50">
                       <span className="text-xs text-muted-foreground">
                         {mentor.current_mentees || 0}/{mentor.max_mentees || 5} mentees
                       </span>
-                      <div className="flex gap-2 w-full sm:w-auto">
-                        {/* Only show Query button if connected */}
+                      <div className="flex gap-2">
                         {mentor.isConnected && (
                           <Button 
                             size="sm" 
                             variant="outline"
                             onClick={() => handleOpenQueryForm(mentor)}
-                            className="flex-1 sm:flex-none"
+                            className="h-8 px-2"
                           >
-                            <FileText className="w-4 h-4 sm:mr-1" />
-                            <span className="hidden sm:inline">Query</span>
+                            <FileText className="w-3.5 h-3.5" />
                           </Button>
                         )}
                         {mentor.isConnected ? (
-                          <Badge className="bg-success/20 text-success border-success/30 px-2 sm:px-3 py-1.5">
-                            <Check className="w-3 h-3 sm:mr-1" />
-                            <span className="hidden sm:inline">Mentor</span>
+                          <Badge className="bg-success/20 text-success border-success/30 px-2 py-1">
+                            <Check className="w-3 h-3" />
                           </Badge>
                         ) : mentor.hasPendingRequest ? (
-                          <Badge variant="secondary" className="px-2 sm:px-3 py-1.5">
-                            <Clock className="w-3 h-3 sm:mr-1" />
-                            <span className="hidden sm:inline">Pending</span>
+                          <Badge variant="secondary" className="px-2 py-1">
+                            <Clock className="w-3 h-3" />
                           </Badge>
                         ) : (
                           <Button 
                             size="sm" 
                             onClick={() => handleRequestMentorship(mentor)}
                             disabled={!mentor.is_available || (mentor.current_mentees || 0) >= (mentor.max_mentees || 5)}
-                            className="flex-1 sm:flex-none"
+                            className="h-8 px-3 text-xs"
                           >
                             Request
                           </Button>
@@ -748,7 +742,6 @@ const FindMentors = () => {
         </div>
       </main>
 
-      <MobileBottomNav role="mentee" />
       <DashboardSidebar role="mentee" />
 
       {/* Request Dialog */}

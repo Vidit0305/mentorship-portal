@@ -10,8 +10,8 @@ import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import { z } from "zod";
 
 const emailSchema = z.string().email("Please enter a valid email address").refine(
-  (email) => email.endsWith(".edu"),
-  { message: "Please use your university email (.edu)" }
+  (email) => email.endsWith("iilm.edu"),
+  { message: "Please use your IILM University email (ending with iilm.edu)" }
 );
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 
@@ -281,7 +281,7 @@ const Auth = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@university.edu"
+                  placeholder="name@iilm.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="h-12 rounded-xl bg-card border-border"

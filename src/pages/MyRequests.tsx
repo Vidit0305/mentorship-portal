@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
+
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { 
   User, 
@@ -162,7 +162,7 @@ const MyRequests = () => {
   }
 
   return (
-    <div className="min-h-screen hero-gradient flex flex-col pb-16 md:pb-0">
+    <div className="min-h-screen hero-gradient flex flex-col">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -171,12 +171,12 @@ const MyRequests = () => {
               <Button variant="ghost" size="icon" onClick={() => navigate("/mentee-dashboard")}>
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <Link to="/" className="flex flex-col items-center">
+              <button onClick={() => window.location.href = '/'} className="flex flex-col items-center hover:opacity-80 transition-opacity">
                 <h1 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                   IILM UNIVERSITY
                 </h1>
                 <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
-              </Link>
+              </button>
             </div>
             <div className="flex items-center gap-2">
               <ThemeToggle />
@@ -299,7 +299,6 @@ const MyRequests = () => {
         </div>
       </main>
 
-      <MobileBottomNav role="mentee" />
       <DashboardSidebar role="mentee" />
     </div>
   );
