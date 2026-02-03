@@ -70,16 +70,16 @@ const Index = () => {
       {/* Fixed Top Navigation */}
       <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <div className="flex flex-col items-center">
-              <h1 className="font-display font-semibold text-lg text-foreground">
+              <h1 className="font-display font-semibold text-xl md:text-2xl lg:text-3xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
                 IILM UNIVERSITY
               </h1>
-              <span className="text-[10px] text-primary font-medium italic -mt-1">Mentorship Portal</span>
+              <span className="text-xs md:text-sm text-primary font-medium italic -mt-1">Mentorship Portal</span>
             </div>
 
-            {/* Center Navigation Links */}
+            {/* Center Navigation Links - Desktop Only */}
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
               <button onClick={() => document.getElementById('features')?.scrollIntoView({
               behavior: 'smooth'
@@ -104,26 +104,6 @@ const Index = () => {
             </div>
             
             <ThemeToggle />
-          </div>
-
-          {/* Mobile Navigation */}
-          <div className="flex md:hidden items-center justify-center gap-4 pb-3 text-xs">
-            <button onClick={() => document.getElementById('features')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="text-muted-foreground hover:text-primary transition-colors">
-              Features
-            </button>
-            <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="text-muted-foreground hover:text-primary transition-colors">
-              How it Works
-            </button>
-            <button onClick={() => setAboutOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
-              Privacy
-            </button>
-            <button onClick={() => setFeedbackOpen(true)} className="text-muted-foreground hover:text-primary transition-colors">
-              Feedback
-            </button>
           </div>
         </div>
       </nav>

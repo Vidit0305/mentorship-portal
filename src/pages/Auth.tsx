@@ -43,8 +43,12 @@ const Auth = () => {
         
         if (profile) {
           // Redirect based on the role stored in database
-          const dashboardPath = profile.role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
-          navigate(dashboardPath);
+          if (profile.role === "admin") {
+            navigate("/admin");
+          } else {
+            const dashboardPath = profile.role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
+            navigate(dashboardPath);
+          }
         } else {
           // New user - redirect based on URL role
           const dashboardPath = role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
@@ -63,8 +67,12 @@ const Auth = () => {
           .single();
         
         if (profile) {
-          const dashboardPath = profile.role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
-          navigate(dashboardPath);
+          if (profile.role === "admin") {
+            navigate("/admin");
+          } else {
+            const dashboardPath = profile.role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
+            navigate(dashboardPath);
+          }
         } else {
           const dashboardPath = role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
           navigate(dashboardPath);
@@ -232,7 +240,7 @@ const Auth = () => {
 
       {/* Right Side - Auth Form */}
       <div className="w-full lg:w-1/2 flex flex-col px-6 md:px-12 xl:px-20 py-6">
-        {/* Top bar with back link and theme toggle */}
+        {/* Top bar with back link and theme toggle - Toggle always visible on right */}
         <div className="flex items-center justify-between mb-8">
           <div className="lg:hidden">
             <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
@@ -240,7 +248,7 @@ const Auth = () => {
               Back
             </Link>
           </div>
-          <div className="lg:hidden" />
+          <div className="flex-1" />
           <ThemeToggle />
         </div>
 

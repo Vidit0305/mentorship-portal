@@ -16,6 +16,7 @@ import MyMentees from "./pages/MyMentees";
 import MentorQueries from "./pages/MentorQueries";
 import MyQueries from "./pages/MyQueries";
 import QueryView from "./pages/QueryView";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => {
               <Route path="/mentor-queries" element={<MentorQueries />} />
               <Route path="/my-queries" element={<MyQueries />} />
               <Route path="/query/:token" element={<QueryView />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

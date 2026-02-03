@@ -495,25 +495,50 @@ const MentorDashboard = () => {
                       <p className="text-xs text-muted-foreground">Separate skills with commas</p>
                     </div>
 
-                    {/* Areas of Guidance */}
+                    {/* Help (formerly Areas of Guidance) */}
                     <div className="space-y-2">
-                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">Areas of Guidance</Label>
-                      <Input 
-                        value={areasOfGuidance} 
-                        onChange={(e) => setAreasOfGuidance(e.target.value)} 
-                        placeholder="e.g., Resume Review, Interview Prep, Research"
-                      />
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">Help</Label>
+                      <Select 
+                        value={areasOfGuidance.split(",")[0]?.trim() || ""} 
+                        onValueChange={(val) => setAreasOfGuidance(val)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select help type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Academic Help">Academic Help</SelectItem>
+                          <SelectItem value="Internship Help">Internship Help</SelectItem>
+                          <SelectItem value="Placement Help">Placement Help</SelectItem>
+                          <SelectItem value="Career Guidance">Career Guidance</SelectItem>
+                          <SelectItem value="Project Help">Project Help</SelectItem>
+                          <SelectItem value="Others">Others</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
-                    {/* Experience */}
+                    {/* Domain (formerly Experience) */}
                     <div className="space-y-2">
-                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">Experience</Label>
-                      <Textarea 
-                        value={experience} 
-                        onChange={(e) => setExperience(e.target.value)} 
-                        placeholder="Describe your experience..."
-                        rows={2}
-                      />
+                      <Label className="text-xs uppercase tracking-wider text-muted-foreground">Domain</Label>
+                      <Select 
+                        value={experience || ""} 
+                        onValueChange={(val) => setExperience(val)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select domain" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Computer Science">Computer Science</SelectItem>
+                          <SelectItem value="Data Science">Data Science</SelectItem>
+                          <SelectItem value="Business & Management">Business & Management</SelectItem>
+                          <SelectItem value="Finance">Finance</SelectItem>
+                          <SelectItem value="Marketing">Marketing</SelectItem>
+                          <SelectItem value="Design & UX">Design & UX</SelectItem>
+                          <SelectItem value="Engineering">Engineering</SelectItem>
+                          <SelectItem value="Research">Research</SelectItem>
+                          <SelectItem value="Entrepreneurship">Entrepreneurship</SelectItem>
+                          <SelectItem value="Others">Others</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </CardContent>
                 </Card>
