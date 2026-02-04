@@ -19,38 +19,35 @@ const Index = () => {
     toast
   } = useToast();
   const [submittingFeedback, setSubmittingFeedback] = useState(false);
-
   const handleSubmitFeedback = async () => {
     if (rating === 0) {
       toast({
         title: "Please rate your experience",
         variant: "destructive",
-        duration: 5000,
+        duration: 5000
       });
       return;
     }
-    
     setSubmittingFeedback(true);
-    
     try {
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-feedback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`
         },
-        body: JSON.stringify({ rating, feedback }),
+        body: JSON.stringify({
+          rating,
+          feedback
+        })
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error || "Failed to submit feedback");
       }
-
       toast({
         title: "Thank you for your feedback! 🎉",
-        description: data.message || "We really appreciate you taking the time to share your thoughts with us.",
+        description: data.message || "We really appreciate you taking the time to share your thoughts with us."
       });
       setFeedbackOpen(false);
       setRating(0);
@@ -61,7 +58,7 @@ const Index = () => {
         title: "Oops! Something went wrong",
         description: "We couldn't submit your feedback right now. Please try again later.",
         variant: "destructive",
-        duration: 5000,
+        duration: 5000
       });
     } finally {
       setSubmittingFeedback(false);
@@ -75,12 +72,7 @@ const Index = () => {
             {/* Logo - Clickable to reload */}
             <button onClick={() => window.location.reload()} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <img src={iilmLogo} alt="IILM University" className="h-12 md:h-16 w-auto" />
-              <div className="flex flex-col items-start">
-                <h1 className="font-display font-semibold text-xl md:text-2xl lg:text-3xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
-                  IILM UNIVERSITY
-                </h1>
-                <span className="text-xs md:text-sm text-primary font-medium italic">Mentorship Portal</span>
-              </div>
+              
             </button>
 
             {/* Center Navigation Links - Desktop Only */}
@@ -320,11 +312,7 @@ const Index = () => {
               </p>
             </div>
             <Button onClick={handleSubmitFeedback} className="w-full" variant="heroPrimary" disabled={submittingFeedback}>
-              {submittingFeedback ? (
-                <>Sending...</>
-              ) : (
-                <><Send className="w-4 h-4 mr-2" /> Submit Feedback</>
-              )}
+              {submittingFeedback ? <>Sending...</> : <><Send className="w-4 h-4 mr-2" /> Submit Feedback</>}
             </Button>
           </div>
         </DialogContent>
