@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import iilmLogo from "@/assets/iilm-logo.png";
 const Index = () => {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -72,11 +73,14 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo - Clickable to reload */}
-            <button onClick={() => window.location.reload()} className="flex flex-col items-center hover:opacity-80 transition-opacity">
-              <h1 className="font-display font-semibold text-2xl md:text-3xl lg:text-4xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
-                IILM UNIVERSITY
-              </h1>
-              <span className="text-sm md:text-base text-primary font-medium italic -mt-1">Mentorship Portal</span>
+            <button onClick={() => window.location.reload()} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <img src={iilmLogo} alt="IILM University" className="h-12 md:h-16 w-auto" />
+              <div className="flex flex-col items-start">
+                <h1 className="font-display font-semibold text-xl md:text-2xl lg:text-3xl text-foreground" style={{ fontFamily: "Georgia, serif" }}>
+                  IILM UNIVERSITY
+                </h1>
+                <span className="text-xs md:text-sm text-primary font-medium italic">Mentorship Portal</span>
+              </div>
             </button>
 
             {/* Center Navigation Links - Desktop Only */}

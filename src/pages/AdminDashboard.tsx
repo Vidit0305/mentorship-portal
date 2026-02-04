@@ -47,6 +47,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
+import iilmLogo from "@/assets/iilm-logo.png";
 
 interface UserProfile {
   user_id: string;
@@ -84,7 +85,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!session?.user) {
-        navigate("/auth?role=mentee");
+        navigate("/admin");
         return;
       }
       
@@ -97,7 +98,7 @@ const AdminDashboard = () => {
       
       if (profile?.role !== "admin") {
         await supabase.auth.signOut();
-        navigate("/auth?role=mentee");
+        navigate("/admin");
         toast({
           title: "Access Denied",
           description: "You don't have admin privileges.",
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session?.user) {
-        navigate("/auth?role=mentee");
+        navigate("/admin");
         return;
       }
       
@@ -124,7 +125,7 @@ const AdminDashboard = () => {
       
       if (profile?.role !== "admin") {
         await supabase.auth.signOut();
-        navigate("/auth?role=mentee");
+        navigate("/admin");
         toast({
           title: "Access Denied",
           description: "You don't have admin privileges.",
@@ -167,7 +168,7 @@ const AdminDashboard = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    navigate("/");
+    navigate("/admin");
   };
 
   const handleOpenAddDialog = (role: "mentor" | "mentee") => {
@@ -415,11 +416,14 @@ const AdminDashboard = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <button onClick={() => window.location.href = '/'} className="flex flex-col items-center hover:opacity-80 transition-opacity">
-              <h1 className="text-xl md:text-2xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
-                IILM UNIVERSITY
-              </h1>
-              <span className="text-xs md:text-sm text-primary font-medium italic">Admin Portal</span>
+            <button onClick={() => window.location.href = '/'} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <img src={iilmLogo} alt="IILM University" className="h-10 md:h-12 w-auto" />
+              <div className="flex flex-col items-start">
+                <h1 className="text-lg md:text-xl font-semibold text-foreground" style={{ fontFamily: "Georgia, serif" }}>
+                  IILM UNIVERSITY
+                </h1>
+                <span className="text-xs text-primary font-medium italic">Admin Portal</span>
+              </div>
             </button>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="hidden md:flex items-center gap-1 bg-primary/10 text-primary border-primary/30">
