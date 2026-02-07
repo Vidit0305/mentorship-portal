@@ -40,11 +40,13 @@ export type Database = {
           career_goals: string | null
           course: string | null
           created_at: string
+          guardian_phone: string | null
           id: string
           interests: string[] | null
           section: string | null
           semester: string | null
           specialisation: string | null
+          student_phone: string | null
           updated_at: string
           user_id: string
           year: string | null
@@ -53,11 +55,13 @@ export type Database = {
           career_goals?: string | null
           course?: string | null
           created_at?: string
+          guardian_phone?: string | null
           id?: string
           interests?: string[] | null
           section?: string | null
           semester?: string | null
           specialisation?: string | null
+          student_phone?: string | null
           updated_at?: string
           user_id: string
           year?: string | null
@@ -66,11 +70,13 @@ export type Database = {
           career_goals?: string | null
           course?: string | null
           created_at?: string
+          guardian_phone?: string | null
           id?: string
           interests?: string[] | null
           section?: string | null
           semester?: string | null
           specialisation?: string | null
+          student_phone?: string | null
           updated_at?: string
           user_id?: string
           year?: string | null
@@ -227,6 +233,33 @@ export type Database = {
         }
         Relationships: []
       }
+      organizational_hierarchy: {
+        Row: {
+          created_at: string
+          id: string
+          subordinate_id: string
+          subordinate_role: Database["public"]["Enums"]["app_role"]
+          superior_id: string
+          superior_role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          subordinate_id: string
+          subordinate_role: Database["public"]["Enums"]["app_role"]
+          superior_id: string
+          superior_role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          subordinate_id?: string
+          subordinate_role?: Database["public"]["Enums"]["app_role"]
+          superior_id?: string
+          superior_role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -293,7 +326,7 @@ export type Database = {
       setup_admin_user: { Args: never; Returns: undefined }
     }
     Enums: {
-      app_role: "mentee" | "mentor" | "admin"
+      app_role: "mentee" | "mentor" | "admin" | "dean" | "hod"
       mentor_type: "senior" | "alumni" | "faculty"
       request_status: "pending" | "accepted" | "rejected"
     }
@@ -423,7 +456,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["mentee", "mentor", "admin"],
+      app_role: ["mentee", "mentor", "admin", "dean", "hod"],
       mentor_type: ["senior", "alumni", "faculty"],
       request_status: ["pending", "accepted", "rejected"],
     },

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Footer } from "@/components/Footer";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { ArrowRight, Users, BookOpen, Award, CheckCircle, MessageSquare, Star, Send } from "lucide-react";
+import { ArrowRight, Users, BookOpen, Award, CheckCircle, MessageSquare, Star, Send, Shield, Building2, Layers } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ const Index = () => {
     toast
   } = useToast();
   const [submittingFeedback, setSubmittingFeedback] = useState(false);
+  const [authorityOpen, setAuthorityOpen] = useState(false);
   const handleSubmitFeedback = async () => {
     if (rating === 0) {
       toast({
@@ -134,6 +135,36 @@ const Index = () => {
                   I am a Mentor <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
+            </div>
+
+            {/* Authority Dropdown */}
+            <div className="mt-6 flex flex-col items-center">
+              {!authorityOpen ? (
+                <button
+                  onClick={() => setAuthorityOpen(true)}
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
+                >
+                  I am the Authority
+                </button>
+              ) : (
+                <div className="flex flex-col sm:flex-row items-center gap-3 animate-fade-in">
+                  <Link to="/admin">
+                    <Button variant="outline" size="sm" className="gap-2 min-w-[160px]">
+                      <Shield className="w-4 h-4" /> I am the Admin
+                    </Button>
+                  </Link>
+                  <Link to="/auth?role=dean">
+                    <Button variant="outline" size="sm" className="gap-2 min-w-[160px]">
+                      <Building2 className="w-4 h-4" /> I am the Dean
+                    </Button>
+                  </Link>
+                  <Link to="/auth?role=hod">
+                    <Button variant="outline" size="sm" className="gap-2 min-w-[160px]">
+                      <Layers className="w-4 h-4" /> I am the HOD
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </ScrollReveal>
         </div>

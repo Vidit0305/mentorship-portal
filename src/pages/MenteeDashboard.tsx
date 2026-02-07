@@ -57,6 +57,8 @@ interface MenteeProfile {
   section: string | null;
   interests: string[] | null;
   career_goals: string | null;
+  student_phone: string | null;
+  guardian_phone: string | null;
 }
 
 const MenteeDashboard = () => {
@@ -79,6 +81,8 @@ const MenteeDashboard = () => {
   const [section, setSection] = useState("");
   const [interests, setInterests] = useState("");
   const [careerGoals, setCareerGoals] = useState("");
+  const [studentPhone, setStudentPhone] = useState("");
+  const [guardianPhone, setGuardianPhone] = useState("");
 
   // Image cropping
   const [cropperOpen, setCropperOpen] = useState(false);
@@ -155,6 +159,8 @@ const MenteeDashboard = () => {
         setSection(menteeData.section || "");
         setInterests(menteeData.interests?.join(", ") || "");
         setCareerGoals(menteeData.career_goals || "");
+        setStudentPhone(menteeData.student_phone || "");
+        setGuardianPhone(menteeData.guardian_phone || "");
       }
 
       // Fetch mentorship stats
@@ -191,13 +197,26 @@ const MenteeDashboard = () => {
       semester !== (menteeProfile?.semester || "") ||
       section !== (menteeProfile?.section || "") ||
       interests !== (menteeProfile?.interests?.join(", ") || "") ||
-      careerGoals !== (menteeProfile?.career_goals || "");
+      careerGoals !== (menteeProfile?.career_goals || "") ||
+      studentPhone !== (menteeProfile?.student_phone || "") ||
+      guardianPhone !== (menteeProfile?.guardian_phone || "");
 
     setHasChanges(profileChanged || menteeChanged);
-  }, [fullName, course, specialisation, year, semester, section, interests, careerGoals, profile, menteeProfile]);
+  }, [fullName, course, specialisation, year, semester, section, interests, careerGoals, studentPhone, guardianPhone, profile, menteeProfile]);
 
   const handleSave = async () => {
     if (!user) return;
+
+    // Validate phone numbers are different
+    if (studentPhone && guardianPhone && studentPhone === guardianPhone) {
+      toast({
+        title: "Phone numbers must be different",
+        description: "Student and guardian phone numbers cannot be the same.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -222,7 +241,9 @@ const MenteeDashboard = () => {
           semester,
           section,
           interests: interestsArray,
-          career_goals: careerGoals
+          career_goals: careerGoals,
+          student_phone: studentPhone,
+          guardian_phone: guardianPhone,
         }, { onConflict: "user_id" });
 
       if (menteeError) throw menteeError;
@@ -444,6 +465,29 @@ const MenteeDashboard = () => {
                         placeholder="Describe your career aspirations..."
                         rows={3}
                       />
+                    </div>
+
+                    {/* Phone Numbers */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-xs uppercase tracking-wider text-muted-foreground">Student Phone Number</Label>
+                        <Input 
+                          value={studentPhone} 
+                          onChange={(e) => setStudentPhone(e.target.value)} 
+                          placeholder="e.g., +91 9876543210"
+                          type="tel"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs uppercase tracking-wider text-muted-foreground">Guardian Phone Number</Label>
+                        <Input 
+                          value={guardianPhone} 
+                          onChange={(e) => setGuardianPhone(e.target.value)} 
+                          placeholder="e.g., +91 9876543210"
+                          type="tel"
+                        />
+                        <p className="text-xs text-muted-foreground">Must be different from student phone</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

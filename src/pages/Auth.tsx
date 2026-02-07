@@ -48,14 +48,22 @@ const Auth = () => {
           // Redirect based on the role stored in database
           if (profile.role === "admin") {
             navigate("/admin");
+          } else if (profile.role === "dean") {
+            navigate("/dean-dashboard");
+          } else if (profile.role === "hod") {
+            navigate("/hod-dashboard");
           } else {
             const dashboardPath = profile.role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
             navigate(dashboardPath);
           }
         } else {
           // New user - redirect based on URL role
-          const dashboardPath = role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
-          navigate(dashboardPath);
+          if (role === "dean") navigate("/dean-dashboard");
+          else if (role === "hod") navigate("/hod-dashboard");
+          else {
+            const dashboardPath = role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
+            navigate(dashboardPath);
+          }
         }
       }
     });
@@ -72,13 +80,21 @@ const Auth = () => {
         if (profile) {
           if (profile.role === "admin") {
             navigate("/admin");
+          } else if (profile.role === "dean") {
+            navigate("/dean-dashboard");
+          } else if (profile.role === "hod") {
+            navigate("/hod-dashboard");
           } else {
             const dashboardPath = profile.role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
             navigate(dashboardPath);
           }
         } else {
-          const dashboardPath = role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
-          navigate(dashboardPath);
+          if (role === "dean") navigate("/dean-dashboard");
+          else if (role === "hod") navigate("/hod-dashboard");
+          else {
+            const dashboardPath = role === "mentor" ? "/mentor-dashboard" : "/mentee-dashboard";
+            navigate(dashboardPath);
+          }
         }
       }
     });
@@ -248,15 +264,19 @@ const Auth = () => {
         </div>
 
         <h2 className="font-serif text-4xl xl:text-5xl font-semibold text-foreground leading-tight mb-6">
-          {role === "mentor" ? "Guide the next" : "Find your path."}
+          {role === "mentor" ? "Guide the next" : role === "dean" ? "Lead the" : role === "hod" ? "Oversee your" : "Find your path."}
           <span className="block italic text-primary">
-            {role === "mentor" ? "generation." : "Reveal your potential."}
+            {role === "mentor" ? "generation." : role === "dean" ? "institution." : role === "hod" ? "department." : "Reveal your potential."}
           </span>
         </h2>
 
         <p className="text-muted-foreground text-lg max-w-md mb-8">
           {role === "mentor" 
             ? "Share your experience and help students navigate their academic and professional journey."
+            : role === "dean"
+            ? "Monitor and oversee all mentorship activities across departments."
+            : role === "hod"
+            ? "Track mentors and mentees in your department and ensure quality mentorship."
             : "Connect with experienced mentors who can guide you toward your goals."}
         </p>
 

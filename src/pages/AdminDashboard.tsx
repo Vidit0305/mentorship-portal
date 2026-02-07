@@ -45,6 +45,8 @@ import {
   Shield,
   Search,
   Loader2,
+  Building2,
+  Layers,
 } from "lucide-react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import iilmLogo from "@/assets/iilm-logo.png";
@@ -65,6 +67,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [mentors, setMentors] = useState<UserProfile[]>([]);
   const [mentees, setMentees] = useState<UserProfile[]>([]);
+  const [deans, setDeans] = useState<UserProfile[]>([]);
+  const [hods, setHods] = useState<UserProfile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Dialog states
@@ -73,13 +77,13 @@ const AdminDashboard = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
-  const [dialogRole, setDialogRole] = useState<"mentor" | "mentee">("mentee");
+  const [dialogRole, setDialogRole] = useState<"mentor" | "mentee" | "dean" | "hod">("mentee");
 
   // Form states
   const [formEmail, setFormEmail] = useState("");
   const [formPassword, setFormPassword] = useState("");
   const [formName, setFormName] = useState("");
-  const [newRole, setNewRole] = useState<"mentor" | "mentee">("mentee");
+  const [newRole, setNewRole] = useState<"mentor" | "mentee" | "dean" | "hod">("mentee");
   const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
@@ -153,9 +157,13 @@ const AdminDashboard = () => {
 
       const mentorList = profiles?.filter(p => p.role === "mentor") || [];
       const menteeList = profiles?.filter(p => p.role === "mentee") || [];
+      const deanList = profiles?.filter(p => p.role === "dean") || [];
+      const hodList = profiles?.filter(p => p.role === "hod") || [];
 
       setMentors(mentorList);
       setMentees(menteeList);
+      setDeans(deanList);
+      setHods(hodList);
     } catch (error) {
       console.error("Error fetching users:", error);
       toast({
@@ -171,7 +179,7 @@ const AdminDashboard = () => {
     navigate("/admin");
   };
 
-  const handleOpenAddDialog = (role: "mentor" | "mentee") => {
+  const handleOpenAddDialog = (role: "mentor" | "mentee" | "dean" | "hod") => {
     setDialogRole(role);
     setFormEmail("");
     setFormPassword("");
@@ -193,7 +201,10 @@ const AdminDashboard = () => {
 
   const handleOpenRoleDialog = (user: UserProfile) => {
     setSelectedUser(user);
-    setNewRole(user.role === "mentor" ? "mentee" : "mentor");
+    // Set default new role to something different from current
+    const roleOptions = ["mentor", "mentee", "dean", "hod"] as const;
+    const nextRole = roleOptions.find(r => r !== user.role) || "mentee";
+    setNewRole(nextRole);
     setRoleDialogOpen(true);
   };
 
@@ -392,15 +403,16 @@ const AdminDashboard = () => {
     }
   };
 
-  const filteredMentors = mentors.filter(m => 
-    m.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    m.email?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filterBySearch = (users: UserProfile[]) =>
+    users.filter(m => 
+      m.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      m.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-  const filteredMentees = mentees.filter(m => 
-    m.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    m.email?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredMentors = filterBySearch(mentors);
+  const filteredMentees = filterBySearch(mentees);
+  const filteredDeans = filterBySearch(deans);
+  const filteredHods = filterBySearch(hods);
 
   if (loading) {
     return (
@@ -453,28 +465,24 @@ const AdminDashboard = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="stat-card">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5 text-primary" />
+            {[
+              { icon: Building2, label: "Deans", count: deans.length, color: "bg-primary/10 text-primary" },
+              { icon: Layers, label: "HODs", count: hods.length, color: "bg-primary/10 text-primary" },
+              { icon: GraduationCap, label: "Mentors", count: mentors.length, color: "bg-primary/10 text-primary" },
+              { icon: Users, label: "Mentees", count: mentees.length, color: "bg-success/10 text-success" },
+            ].map((stat, i) => (
+              <Card key={i} className="stat-card">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.color.split(" ")[0]}`}>
+                    <stat.icon className={`w-5 h-5 ${stat.color.split(" ")[1]}`} />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-semibold text-foreground">{stat.count}</p>
+                    <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold text-foreground">{mentors.length}</p>
-                  <p className="text-xs text-muted-foreground">Mentors</p>
-                </div>
-              </div>
-            </Card>
-            <Card className="stat-card">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-success" />
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-foreground">{mentees.length}</p>
-                  <p className="text-xs text-muted-foreground">Mentees</p>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            ))}
           </div>
 
           {/* Search */}
@@ -490,16 +498,92 @@ const AdminDashboard = () => {
 
           {/* Tabs */}
           <Tabs defaultValue="mentors" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-4 mb-6">
+              <TabsTrigger value="deans" className="gap-2">
+                <Building2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Deans</span> ({filteredDeans.length})
+              </TabsTrigger>
+              <TabsTrigger value="hods" className="gap-2">
+                <Layers className="w-4 h-4" />
+                <span className="hidden sm:inline">HODs</span> ({filteredHods.length})
+              </TabsTrigger>
               <TabsTrigger value="mentors" className="gap-2">
                 <GraduationCap className="w-4 h-4" />
-                Mentors ({filteredMentors.length})
+                <span className="hidden sm:inline">Mentors</span> ({filteredMentors.length})
               </TabsTrigger>
               <TabsTrigger value="mentees" className="gap-2">
                 <Users className="w-4 h-4" />
-                Mentees ({filteredMentees.length})
+                <span className="hidden sm:inline">Mentees</span> ({filteredMentees.length})
               </TabsTrigger>
             </TabsList>
+
+            {/* Deans Tab */}
+            <TabsContent value="deans">
+              <Card className="glass-card">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="font-serif">Deans</CardTitle>
+                    <CardDescription>Manage dean accounts</CardDescription>
+                  </div>
+                  <Button onClick={() => handleOpenAddDialog("dean")} className="gap-2">
+                    <Plus className="w-4 h-4" /> Add Dean
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader><TableRow><TableHead>User</TableHead><TableHead>Email</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+                    <TableBody>
+                      {filteredDeans.map((u) => (
+                        <TableRow key={u.user_id}>
+                          <TableCell><div className="flex items-center gap-3"><Avatar className="w-8 h-8"><AvatarImage src={u.avatar_url || ""} /><AvatarFallback className="bg-primary/10 text-primary text-xs"><User className="w-4 h-4" /></AvatarFallback></Avatar><span className="font-medium">{u.full_name || "—"}</span></div></TableCell>
+                          <TableCell className="text-muted-foreground">{u.email}</TableCell>
+                          <TableCell className="text-right"><div className="flex justify-end gap-2">
+                            <Button variant="ghost" size="icon" onClick={() => handleOpenEditDialog(u)}><Pencil className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="icon" onClick={() => handleOpenRoleDialog(u)}><ArrowRightLeft className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => handleOpenDeleteDialog(u)}><Trash2 className="w-4 h-4" /></Button>
+                          </div></TableCell>
+                        </TableRow>
+                      ))}
+                      {filteredDeans.length === 0 && <TableRow><TableCell colSpan={3} className="text-center text-muted-foreground py-8">No deans found</TableCell></TableRow>}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* HODs Tab */}
+            <TabsContent value="hods">
+              <Card className="glass-card">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="font-serif">HODs</CardTitle>
+                    <CardDescription>Manage HOD accounts</CardDescription>
+                  </div>
+                  <Button onClick={() => handleOpenAddDialog("hod")} className="gap-2">
+                    <Plus className="w-4 h-4" /> Add HOD
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader><TableRow><TableHead>User</TableHead><TableHead>Email</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+                    <TableBody>
+                      {filteredHods.map((u) => (
+                        <TableRow key={u.user_id}>
+                          <TableCell><div className="flex items-center gap-3"><Avatar className="w-8 h-8"><AvatarImage src={u.avatar_url || ""} /><AvatarFallback className="bg-primary/10 text-primary text-xs"><User className="w-4 h-4" /></AvatarFallback></Avatar><span className="font-medium">{u.full_name || "—"}</span></div></TableCell>
+                          <TableCell className="text-muted-foreground">{u.email}</TableCell>
+                          <TableCell className="text-right"><div className="flex justify-end gap-2">
+                            <Button variant="ghost" size="icon" onClick={() => handleOpenEditDialog(u)}><Pencil className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="icon" onClick={() => handleOpenRoleDialog(u)}><ArrowRightLeft className="w-4 h-4" /></Button>
+                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => handleOpenDeleteDialog(u)}><Trash2 className="w-4 h-4" /></Button>
+                          </div></TableCell>
+                        </TableRow>
+                      ))}
+                      {filteredHods.length === 0 && <TableRow><TableCell colSpan={3} className="text-center text-muted-foreground py-8">No HODs found</TableCell></TableRow>}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             <TabsContent value="mentors">
               <Card className="glass-card">
@@ -776,11 +860,13 @@ const AdminDashboard = () => {
           </DialogHeader>
           <div className="py-4">
             <Label>New Role</Label>
-            <Select value={newRole} onValueChange={(v) => setNewRole(v as "mentor" | "mentee")}>
+            <Select value={newRole} onValueChange={(v) => setNewRole(v as "mentor" | "mentee" | "dean" | "hod")}>
               <SelectTrigger className="mt-2">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="dean">Dean</SelectItem>
+                <SelectItem value="hod">HOD</SelectItem>
                 <SelectItem value="mentor">Mentor</SelectItem>
                 <SelectItem value="mentee">Mentee</SelectItem>
               </SelectContent>

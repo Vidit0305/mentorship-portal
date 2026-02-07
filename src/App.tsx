@@ -18,6 +18,8 @@ import MyQueries from "./pages/MyQueries";
 import QueryView from "./pages/QueryView";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import DeanDashboard from "./pages/DeanDashboard";
+import HodDashboard from "./pages/HodDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +47,8 @@ const App = () => {
               <Route path="/query/:token" element={<QueryView />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="/dean-dashboard" element={<DeanDashboard />} />
+              <Route path="/hod-dashboard" element={<HodDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
