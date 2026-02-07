@@ -17,6 +17,7 @@ import { ImageCropper } from "@/components/ImageCropper";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useMentorChartData, ChartFilterType } from "@/hooks/useMentorChartData";
+import iilmLogo from "@/assets/iilm-logo.png";
 import { 
   User, 
   LogOut, 
@@ -360,11 +361,14 @@ const MentorDashboard = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <button onClick={() => window.location.href = '/'} className="flex flex-col items-center hover:opacity-80 transition-opacity">
-              <h1 className="text-lg font-semibold text-foreground font-display">
-                IILM UNIVERSITY
-              </h1>
-              <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
+            <button onClick={() => window.location.href = '/'} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <img src={iilmLogo} alt="IILM University" className="h-10 md:h-12 w-auto" />
+              <div className="flex flex-col items-start">
+                <h1 className="text-lg font-semibold text-foreground font-display">
+                  IILM UNIVERSITY
+                </h1>
+                <span className="text-xs text-primary font-medium italic">Mentorship Portal</span>
+              </div>
             </button>
             <div className="flex items-center gap-2">
               <ThemeToggle />
